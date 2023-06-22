@@ -22,6 +22,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/imageView3"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:src="@drawable/logo"
@@ -110,13 +111,12 @@
             android:id="@+id/loading_layout"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_centerHorizontal="true"
             android:gravity="center"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerButton">
+            app:layout_constraintTop_toTopOf="parent">
 
             <ProgressBar
                 android:layout_width="70dp"
@@ -128,13 +128,27 @@
             android:layout_width="270dp"
             android:layout_height="60dp"
             android:layout_marginTop="150dp"
+            android:layout_marginBottom="50dp"
             android:background="@drawable/button"
             android:gravity="center"
             android:text="Kaydol"
             android:textColor="@color/white"
             android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/loginText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/loginText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Giriş Yap"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/purple_700"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registerButton" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

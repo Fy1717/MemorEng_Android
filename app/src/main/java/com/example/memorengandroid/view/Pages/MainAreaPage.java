@@ -1,20 +1,29 @@
 package com.example.memorengandroid.view.Pages;
 
+import static com.example.memorengandroid.service.ApiModel.ErrorHandlerModel.errorHandlerModel;
+
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
-
 import com.example.memorengandroid.R;
 import com.example.memorengandroid.adapter.AreaAdapter;
+import com.example.memorengandroid.model.User;
+import com.example.memorengandroid.service.Request.GetEnglish;
+import com.example.memorengandroid.service.Request.Login;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 
 public class MainAreaPage extends AppCompatActivity {
@@ -32,6 +41,8 @@ public class MainAreaPage extends AppCompatActivity {
         searchWordButton.setOnClickListener(v -> showDialog());
 
         setViewPager();
+
+        controlEnglishWords();
     }
 
     private void setViewPager() {
@@ -59,4 +70,31 @@ public class MainAreaPage extends AppCompatActivity {
             dialog.getWindow().setGravity(Gravity.BOTTOM);
         });
     }
+
+    public void controlEnglishWords() {
+        GetEnglish model = new ViewModelProvider(this).get(GetEnglish.class);
+
+        User user = User.getInstance();
+
+        Log.i("USER-ENGLISH", user.getAccessToken());
+
+        model.getEnglishStatus()
+                .observe(this, state -> {
+                    Log.i("ENGLISH", "STATE : " + state);
+
+                    if (state) {
+                        Log.i("ENGLISH", "STATE : " + state);
+                    } else {
+                        if (errorHandlerModel.getGetEnglishWordsErrorMessage() != null &&
+                                !errorHandlerModel.getGetEnglishWordsErrorMessage().equals("")) {
+                            Toast.makeText(MainAreaPage.this,
+                                    errorHandlerModel.getGetEnglishWordsErrorMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void onBackPressed() {}
 }
