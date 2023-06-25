@@ -6,20 +6,25 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.memorengandroid.model.EnglishWord;
+import com.example.memorengandroid.model.EnglishWords;
 import com.example.memorengandroid.model.User;
-import com.example.memorengandroid.service.ApiInterface.UserAPI;
 import com.example.memorengandroid.service.ApiInterface.WordAPI;
 import com.example.memorengandroid.service.ApiModel.ErrorHandlerModel;
-import com.example.memorengandroid.service.ApiModel.ResponseModel;
+import com.example.memorengandroid.service.ApiModel.WordsResponseModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -70,28 +75,28 @@ public class GetEnglish extends ViewModel {
 
                         errorHandlerModel.setGetEnglishWordsErrorMessage(null);
 
+
                         if (response.isSuccessful()) {
                             Gson gson = new Gson();
-                            ResponseModel result = gson.fromJson(response.body().string(), ResponseModel.class);
+                            ResponseBody responseBody = response.body();
+                            List<EnglishWord> englishWordList = new ArrayList<>();
 
-                            ResponseBody myResponse = response.body();
+                            if (responseBody != null) {
+                                String responseString = responseBody.string();
+                                WordsResponseModel responseResult = gson.fromJson(responseString, WordsResponseModel.class);
 
-                            JsonObject data = result.getData();
+                                for (Object jsonItem : responseResult.getData()) {
+                                    EnglishWord englishWord = gson.fromJson(jsonItem.toString(), EnglishWord.class);
 
-                            Log.i("ENGLISH", "SUCCESS");
+                                    englishWordList.add(englishWord);
+                                }
 
-                            System.out.println("ENGLISHMODEL STRING: " + myResponse.toString());
-                            System.out.println("ENGLISHMODEL DATA: " + result.getData());
+                                // set singleton class ----------
+                                EnglishWords englishWords = EnglishWords.getInstance();
+                                englishWords.setAllWords(englishWordList);
+                                // -------------------------------
 
-                            try {
-                                errorHandlerModel.setGetEnglishWordsErrorMessage(null);
-
-                                status.setValue(true);
-                            } catch (Exception e) {
-                                errorHandlerModel.setGetEnglishWordsErrorMessage(defaultErrorMessage);
-                                Log.e("ENGLISH", "ERROR0 : " + defaultErrorMessage);
-
-                                status.setValue(false);
+                                System.out.println("RESULT ALL WORDS : " + englishWords.getAllWords());
                             }
                         } else {
                             errorHandlerModel.setGetEnglishWordsErrorMessage(defaultErrorMessage);
@@ -102,6 +107,8 @@ public class GetEnglish extends ViewModel {
                     } catch (Exception e) {
                         errorHandlerModel.setGetEnglishWordsErrorMessage(defaultErrorMessage);
                         Log.e("ENGLISH", "ERROR2 : " + e.getLocalizedMessage());
+
+                        e.printStackTrace();
 
                         status.setValue(false);
                     }

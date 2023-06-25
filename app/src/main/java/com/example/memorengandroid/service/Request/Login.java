@@ -9,7 +9,8 @@ import androidx.lifecycle.ViewModel;
 import com.example.memorengandroid.model.User;
 import com.example.memorengandroid.service.ApiInterface.UserAPI;
 import com.example.memorengandroid.service.ApiModel.ErrorHandlerModel;
-import com.example.memorengandroid.service.ApiModel.ResponseModel;
+import com.example.memorengandroid.service.ApiModel.UserResponseModel;
+import com.example.memorengandroid.service.ApiModel.WordsResponseModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -68,7 +69,7 @@ public class Login extends ViewModel {
 
                         if (response.isSuccessful()) {
                             Gson gson = new Gson();
-                            ResponseModel result = gson.fromJson(response.body().string(), ResponseModel.class);
+                            UserResponseModel result = gson.fromJson(response.body().string(), UserResponseModel.class);
 
                             ResponseBody myResponse = response.body();
 
