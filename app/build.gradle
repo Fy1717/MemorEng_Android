@@ -56,4 +56,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation("com.tbuonomo:dotsindicator:4.3")
     implementation 'com.squareup.picasso:picasso:2.8'
+
+    // --- room db
+    implementation "androidx.room:room-runtime:2.4.0-alpha03"
+    annotationProcessor "androidx.room:room-compiler:2.4.0-alpha03"
+    // ---
 }

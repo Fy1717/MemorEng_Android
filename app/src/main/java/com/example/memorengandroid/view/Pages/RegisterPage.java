@@ -17,6 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.memorengandroid.R;
+import com.example.memorengandroid.model.Repository.RoomDB.UserEntity;
+import com.example.memorengandroid.model.Repository.RoomDB.UserRoomDatabase;
+import com.example.memorengandroid.model.User;
 import com.example.memorengandroid.service.Request.Register;
 
 public class RegisterPage extends AppCompatActivity {
@@ -81,6 +84,9 @@ public class RegisterPage extends AppCompatActivity {
 
                     if (state) {
                         Intent intent = new Intent(RegisterPage.this, LoginPage.class);
+
+                        setUserToRoom(name, surname, username, email, password);
+
                         startActivity(intent);
                     } else {
                         if (errorHandlerModel.getRegisterErrorMessage() != null && !errorHandlerModel.getRegisterErrorMessage().equals("")) {
@@ -94,5 +100,30 @@ public class RegisterPage extends AppCompatActivity {
                         });
                     }
                 });
+    }
+
+    public void setUserToRoom(String name, String surname, String username, String email, String password) {
+        UserRoomDatabase db = UserRoomDatabase.getDatabase(this);
+        UserEntity userEntity = new UserEntity(1, name, surname, email, username, password, "", "", false);
+
+        try {
+            userEntity.setEmail(email);
+            userEntity.setUsername(username);
+            userEntity.setName(name);
+            userEntity.setSurname(surname);
+            userEntity.setPassword(password);
+
+            db.userDao().add(userEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            userEntity = db.userDao().getUser();
+
+            System.out.println("User from room : " + userEntity.getName() + " " + userEntity.getPassword());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
