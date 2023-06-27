@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_marginTop="40dp"
-        android:text="GAMES"
+        android:text="WORK"
+        android:layout_marginTop="50dp"
         android:textSize="45dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,122 +22,46 @@
     <ScrollView
         android:id="@+id/mainScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="350dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/edittext_border"
+        app:layout_constraintBottom_toTopOf="@+id/search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragmentWelcomeFirstTextView">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/includeArea"
+        <TextView
+            android:id="@+id/allwordstext"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mainScrollView">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/game_wordle"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="#777111"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/game_fill_blanks"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="WORDLE"
-                    android:gravity="center"
-                    android:textSize="30dp"
-                    android:textColor="@color/white"
-                    android:textStyle="italic"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/game_fill_blanks"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="#333444"
-                app:layout_constraintBottom_toTopOf="@+id/game_match_words"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/game_wordle">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="FILL BLANKS"
-                    android:gravity="center"
-                    android:textSize="30dp"
-                    android:textColor="@color/white"
-                    android:textStyle="italic"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/game_match_words"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="@color/red"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/game_multiple_choice"
-                app:layout_constraintTop_toBottomOf="@+id/game_fill_blanks">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="MATCH WORDS"
-                    android:gravity="center"
-                    android:textSize="30dp"
-                    android:textColor="@color/white"
-                    android:textStyle="italic"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/game_multiple_choice"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginBottom="40dp"
-                android:background="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/game_match_words">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="MULTIPLE CHOICE"
-                    android:gravity="center"
-                    android:textSize="30dp"
-                    android:textColor="@color/white"
-                    android:textStyle="italic"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="5dp"
+            android:paddingTop="15dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="15dp"
+            android:text=""
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
     </ScrollView>
+
+
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/edittext_border"
+        android:hint="Find a Word"
+        android:text=""
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainScrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

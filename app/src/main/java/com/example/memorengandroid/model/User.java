@@ -1,7 +1,5 @@
 package com.example.memorengandroid.model;
 
-import com.google.gson.JsonArray;
-
 public class User {
     private static String id;
     private static String email;

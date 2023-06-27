@@ -10,7 +10,6 @@ import com.example.memorengandroid.model.User;
 import com.example.memorengandroid.service.ApiInterface.UserAPI;
 import com.example.memorengandroid.service.ApiModel.ErrorHandlerModel;
 import com.example.memorengandroid.service.ApiModel.UserResponseModel;
-import com.example.memorengandroid.service.ApiModel.WordsResponseModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;

@@ -15,9 +15,6 @@ import com.example.memorengandroid.service.ApiModel.WordsResponseModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;

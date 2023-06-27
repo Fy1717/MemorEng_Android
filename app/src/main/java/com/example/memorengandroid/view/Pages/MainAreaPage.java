@@ -3,16 +3,18 @@ package com.example.memorengandroid.view.Pages;
 import static com.example.memorengandroid.service.ApiModel.ErrorHandlerModel.errorHandlerModel;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,9 +23,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 import com.example.memorengandroid.R;
 import com.example.memorengandroid.adapter.AreaAdapter;
+import com.example.memorengandroid.controller.WordFilter;
 import com.example.memorengandroid.model.User;
 import com.example.memorengandroid.service.Request.GetEnglish;
-import com.example.memorengandroid.service.Request.Login;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 
 public class MainAreaPage extends AppCompatActivity {
@@ -62,6 +64,37 @@ public class MainAreaPage extends AppCompatActivity {
             final Dialog dialog = new Dialog(this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.bottom_sheet_word_search);
+
+            TextView result_of_search = dialog.findViewById(R.id.result_of_search);
+            EditText search = dialog.findViewById(R.id.search_edit_text);
+
+            search.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    System.out.println("NEW TEXT :: " + editable.toString());
+
+                    String str = editable.toString().replaceAll(" ", "");
+
+                    if (!str.equals("")) {
+                        WordFilter wordFilter = new WordFilter();
+                        String resultOfFilter = wordFilter.filterString(str);
+
+                        result_of_search.setText(resultOfFilter);
+                    } else {
+                        result_of_search.setText("");
+                    }
+                }
+            });
 
             dialog.show();
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);

@@ -7,6 +7,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.memorengandroid.view.Fragments.Areas.Category;
+import com.example.memorengandroid.view.Fragments.Areas.FreeWork;
 import com.example.memorengandroid.view.Fragments.Areas.Game;
 import com.example.memorengandroid.view.Fragments.Areas.Level;
 import com.example.memorengandroid.view.Fragments.Areas.UserStatus;
@@ -26,6 +27,8 @@ public class AreaAdapter extends FragmentStateAdapter {
             return new Game();
         } else if ( position == 2) {
             return new Level();
+        } else if ( position == 3) {
+            return new FreeWork();
         }
 
         return new Category();
