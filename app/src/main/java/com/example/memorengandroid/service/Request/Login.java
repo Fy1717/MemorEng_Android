@@ -56,7 +56,7 @@ public class Login extends ViewModel {
             User user = new User(email, password);
             RequestBody body = RequestBody.create(MediaType.parse("application/json"), user.toJsonForLogin());
 
-            Call<ResponseBody> call = userAPI.createToken(body);
+            Call<ResponseBody> call = userAPI.Login(body);
 
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -81,17 +81,23 @@ public class Login extends ViewModel {
 
                             try {
                                 String accessToken = String.valueOf(data.get("accessToken")).replaceAll("\"", "");
+                                String accessTokenExpiration = String.valueOf(data.get("accessTokenExpiration")).replaceAll("\"", "");
+                                String refreshTokenExpiration = String.valueOf(data.get("refreshTokenExpiration")).replaceAll("\"", "");
                                 String refreshToken = String.valueOf(data.get("refreshToken")).replaceAll("\"", "");
 
                                 System.out.println("LOGIN DATA TYPE: " + data.getClass());
 
                                 System.out.println("LOGIN accessToken: " + accessToken);
+                                System.out.println("LOGIN accessTokenExpiration: " + accessTokenExpiration);
                                 System.out.println("LOGIN refreshToken: " + refreshToken);
+                                System.out.println("LOGIN refreshTokenExpiration: " + refreshTokenExpiration);
 
                                 User user = User.getInstance();
 
                                 user.setRefreshToken(refreshToken);
                                 user.setAccessToken(accessToken);
+                                user.setAccessTokenExpiration(accessTokenExpiration);
+                                user.setRefreshTokenExpiration(refreshTokenExpiration);
 
                                 errorHandlerModel.setLoginErrorMessage(null);
 

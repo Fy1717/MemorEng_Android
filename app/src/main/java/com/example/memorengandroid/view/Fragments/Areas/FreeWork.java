@@ -80,15 +80,17 @@ public class FreeWork extends Fragment {
     private void setWordListToScreen() {
         allWords = "";
 
-        for (int i = 0; i < englishWordList.getAllWords().size(); i++) {
-            englishWord = englishWordList.getAllWords().get(i);
+        if (englishWordList.getAllWords() != null) {
+            for (int i = 0; i < englishWordList.getAllWords().size(); i++) {
+                englishWord = englishWordList.getAllWords().get(i);
 
-            allWords += englishWord.getWord() + " = " +
-                    String.valueOf(englishWord.getTranslations().get(0))
-                            .replaceAll("\"", "") + "\n\n";
+                allWords += englishWord.getWord() + " = " +
+                        String.valueOf(englishWord.getTranslations().get(0))
+                                .replaceAll("\"", "") + "\n\n";
+            }
+
+            allwordsText.setText(allWords);
         }
-
-        allwordsText.setText(allWords);
     }
 
     private void filter(String str) {

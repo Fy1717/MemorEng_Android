@@ -3,6 +3,7 @@ package com.example.memorengandroid.view.Pages;
 import static com.example.memorengandroid.service.ApiModel.ErrorHandlerModel.errorHandlerModel;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -10,10 +11,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +32,8 @@ import com.example.memorengandroid.service.Request.GetEnglish;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 
 public class MainAreaPage extends AppCompatActivity {
-    Button searchWordButton;
+    Button searchWordButton, rightMenuButton;
+    User user = User.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,9 @@ public class MainAreaPage extends AppCompatActivity {
 
         searchWordButton = findViewById(R.id.search_word_button);
         searchWordButton.setOnClickListener(v -> showDialog());
+
+        rightMenuButton = findViewById(R.id.profile_button);
+        rightMenuButton.setOnClickListener(v -> showProfileDialog());
 
         setViewPager();
 
@@ -104,10 +111,41 @@ public class MainAreaPage extends AppCompatActivity {
         });
     }
 
+    private void showProfileDialog() {
+        MainAreaPage.this.runOnUiThread(() -> {
+            final Dialog dialog = new Dialog(this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.right_side_bar);
+
+            ImageView closeButton = dialog.findViewById(R.id.close_button);
+            closeButton.setOnClickListener(v -> dialog.dismiss());
+
+            Button exitButton = dialog.findViewById(R.id.exit_button);
+            exitButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainAreaPage.this, LoginPage.class);
+                    startActivity(intent);
+
+                    finish();
+
+                    dialog.dismiss();
+                }
+            });
+
+            TextView username = dialog.findViewById(R.id.username);
+            username.setText(user.getUsername().replaceAll("\"", ""));
+
+            dialog.show();
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().getAttributes().windowAnimations = R.style.ProfileAnimation;
+            dialog.getWindow().setGravity(Gravity.BOTTOM);
+        });
+    }
+
     public void controlEnglishWords() {
         GetEnglish model = new ViewModelProvider(this).get(GetEnglish.class);
-
-        User user = User.getInstance();
 
         Log.i("USER-ENGLISH", user.getAccessToken());
 

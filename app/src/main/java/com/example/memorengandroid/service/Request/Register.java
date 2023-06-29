@@ -56,7 +56,7 @@ public class Register extends ViewModel {
             User user = new User(name, surname, username, email, password);
             RequestBody body = RequestBody.create(MediaType.parse("application/json"), user.toJsonForRegister());
 
-            Call<ResponseBody> call = userAPI.createUser(body);
+            Call<ResponseBody> call = userAPI.Register(body);
 
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -174,7 +174,7 @@ public class Register extends ViewModel {
         OkHttpClient client = clientBuilder.build();
 
         return new Retrofit.Builder()
-                .baseUrl("https://qa.api.memoreng.helloworldeducation.com/")
+                .baseUrl("https://uat.api.memoreng.helloworldeducation.com/")
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();

@@ -83,6 +83,7 @@
             android:background="@drawable/edittext_border"
             android:hint="E-mail"
             android:text=""
+            android:inputType="textEmailAddress"
             android:textAlignment="center"
             android:textSize="20dp"
             android:textStyle="bold"

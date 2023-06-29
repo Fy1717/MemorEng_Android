@@ -21,13 +21,17 @@ public class UserEntity {
     private String password;
     @ColumnInfo(name = "access_token")
     private String accessToken;
+    @ColumnInfo(name = "access_token_expiration")
+    private String accessTokenExpiration;
     @ColumnInfo(name = "refresh_token")
     private String refreshToken;
-    @ColumnInfo(name = "remember_password")
-    private Boolean rememberPassword;
+    @ColumnInfo(name = "refresh_token_expiration")
+    private String refreshTokenExpiration;
+    @ColumnInfo(name = "remember_me")
+    private Boolean rememberMe;
 
     public UserEntity(int uid, String name, String surname, String email, String username, String password,
-                String accessToken, String refreshToken, Boolean rememberPassword) {
+                String accessToken, String accessTokenExpiration, String refreshToken, String refreshTokenExpiration,Boolean rememberMe) {
         this.uid = uid;
         this.name = name;
         this.surname = surname;
@@ -35,8 +39,10 @@ public class UserEntity {
         this.username = username;
         this.password = password;
         this.accessToken = accessToken;
+        this.accessTokenExpiration = accessTokenExpiration;
         this.refreshToken = refreshToken;
-        this.rememberPassword = rememberPassword;
+        this.refreshTokenExpiration = refreshTokenExpiration;
+        this.rememberMe = rememberMe;
     }
 
     public int getUid() {
@@ -103,11 +109,27 @@ public class UserEntity {
         this.refreshToken = refreshToken;
     }
 
-    public Boolean getRememberPassword() {
-        return rememberPassword;
+    public Boolean getRememberMe() {
+        return rememberMe;
     }
 
-    public void setRememberPassword(Boolean rememberPassword) {
-        this.rememberPassword = rememberPassword;
+    public void setRememberMe(Boolean rememberMe) {
+        this.rememberMe = rememberMe;
+    }
+
+    public String getAccessTokenExpiration() {
+        return accessTokenExpiration;
+    }
+
+    public void setAccessTokenExpiration(String accessTokenExpiration) {
+        this.accessTokenExpiration = accessTokenExpiration;
+    }
+
+    public String getRefreshTokenExpiration() {
+        return refreshTokenExpiration;
+    }
+
+    public void setRefreshTokenExpiration(String refreshTokenExpiration) {
+        this.refreshTokenExpiration = refreshTokenExpiration;
     }
 }

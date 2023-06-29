@@ -18,22 +18,23 @@ public class WordFilter {
         } else {
             int resultCount = 0;
 
-            for (EnglishWord myWord: englishWordList.getAllWords()) {
-                System.out.println("NEW TEXT22 :: " +
-                        myWord.getWord().toUpperCase(Locale.ROOT) +
-                        " :: " + str);
+            if (englishWordList.getAllWords() != null) {
+                for (EnglishWord myWord: englishWordList.getAllWords()) {
+                    System.out.println("NEW TEXT22 :: " +
+                            myWord.getWord().toUpperCase(Locale.ROOT) +
+                            " :: " + str);
 
-                if (resultCount < 4 && (myWord.getWord().toUpperCase(Locale.ROOT).contains(str) ||
-                        myWord.getTranslations().get(0).toUpperCase(Locale.ROOT).contains(str))) {
+                    if (resultCount < 4 && (myWord.getWord().toUpperCase(Locale.ROOT).contains(str) ||
+                            myWord.getTranslations().get(0).toUpperCase(Locale.ROOT).contains(str))) {
 
-                    resultText += myWord.getWord() + " = " +
-                            myWord.getTranslations().get(0)
-                                    .replaceAll("\"", "") + "\n\n";
+                        resultText += myWord.getWord() + " = " +
+                                myWord.getTranslations().get(0)
+                                        .replaceAll("\"", "") + "\n\n";
 
-                    resultCount++;
+                        resultCount++;
+                    }
                 }
             }
-
         }
 
         return resultText;

@@ -8,7 +8,12 @@ public class User {
     private static String surname;
     private static String password;
     private static String accessToken;
+
+    private static String accessTokenExpiration;
     private static String refreshToken;
+    private static String refreshTokenExpiration;
+
+    private static Boolean rememberMe;
 
     private static User user;
 
@@ -25,57 +30,42 @@ public class User {
     public static String getId() {
         return id;
     }
-
     public static void setId(String id) {
         User.id = id;
     }
-
     public static String getEmail() {
         return email;
     }
     public static void setEmail(String email) {
         User.email = email;
     }
-
-
     public static String getUsername() {
         return username;
     }
     public static void setUsername(String username) {
         User.username = username;
     }
-
-
     public static String getPassword() {
         return password;
     }
-
     public static void setPassword(String password) {
         User.password = password;
     }
-
-
     public static String getName() {
         return name;
     }
-
     public static void setName(String name) {
         User.name = name;
     }
-
-
     public static String getSurname() {
         return surname;
     }
-
     public static void setSurname(String surname) {
         User.surname = surname;
     }
-
     public static String getAccessToken() {
         return accessToken;
     }
-
     public static void setAccessToken(String accessToken) {
         User.accessToken = accessToken;
     }
@@ -86,6 +76,29 @@ public class User {
 
     public static void setRefreshToken(String refreshToken) {
         User.refreshToken = refreshToken;
+    }
+    public static String getAccessTokenExpiration() {
+        return accessTokenExpiration;
+    }
+
+    public static void setAccessTokenExpiration(String accessTokenExpiration) {
+        User.accessTokenExpiration = accessTokenExpiration;
+    }
+
+    public static String getRefreshTokenExpiration() {
+        return refreshTokenExpiration;
+    }
+
+    public static void setRefreshTokenExpiration(String refreshTokenExpiration) {
+        User.refreshTokenExpiration = refreshTokenExpiration;
+    }
+
+    public static Boolean getRememberMe() {
+        return rememberMe;
+    }
+
+    public static void setRememberMe(Boolean rememberMe) {
+        User.rememberMe = rememberMe;
     }
 
 
@@ -108,5 +121,9 @@ public class User {
 
     public String toJsonForLogin() {
         return "{\"email\":\"" + email + "\",\"password\":\"" + password + "\"}";
+    }
+
+    public String toJsonForLogout() {
+        return "{\"token\":\"" + refreshToken + "\"}";
     }
 }

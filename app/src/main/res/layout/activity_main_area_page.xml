@@ -11,10 +11,10 @@
     android:paddingBottom="16dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/worm_linear"
-        android:layout_width="200dp"
-        android:layout_height="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,14 +29,27 @@
             app:dotsSize="10dp"
             app:dotsSpacing="4dp"
             app:dotsStrokeColor="@color/black"
-            app:dotsStrokeWidth="9dp" />
-    </LinearLayout>
+            app:dotsStrokeWidth="9dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/profile_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/profile"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="64dp"
         android:layout_marginBottom="64dp"
         android:background="@drawable/page_modal">
 

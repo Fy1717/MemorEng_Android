@@ -9,21 +9,32 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.memorengandroid.R;
+import com.example.memorengandroid.model.PageNavigator;
+import com.example.memorengandroid.model.Repository.RoomDB.UserEntity;
+import com.example.memorengandroid.model.Repository.RoomDB.UserRoomController;
+import com.example.memorengandroid.model.User;
 import com.example.memorengandroid.service.Request.Login;
 import com.example.memorengandroid.service.Request.Register;
 
 public class LoginPage extends AppCompatActivity {
     Button loginButton;
-
     View loadingLayout;
     EditText emailEditText, passwordEditText;
+    CheckBox rememberMe;
+    TextView registerText;
+
+    UserRoomController userRoomController;
+    User user = User.getInstance();
+    PageNavigator pageNavigator = PageNavigator.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +46,20 @@ public class LoginPage extends AppCompatActivity {
 
         emailEditText = findViewById(R.id.email);
         passwordEditText = findViewById(R.id.password);
+        rememberMe = findViewById(R.id.checkBoxRemember);
+        registerText = findViewById(R.id.registerText);
+
+        registerText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userRoomController.deleteUserInRoom();
+
+                Intent intent = new Intent(LoginPage.this, RegisterPage.class);
+                startActivity(intent);
+
+                finish();
+            }
+        });
 
         loadingLayout = findViewById(R.id.loading_layout);
 
@@ -42,6 +67,12 @@ public class LoginPage extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (rememberMe.isChecked()) {
+                    user.setRememberMe(true);
+                } else {
+                    user.setRememberMe(false);
+                }
+
                 LoginPage.this.runOnUiThread(new Runnable() {
                     public void run() {
                         loadingLayout.setVisibility(View.VISIBLE);
@@ -53,6 +84,8 @@ public class LoginPage extends AppCompatActivity {
                         passwordEditText.getText().toString().trim());
             }
         });
+
+        recordedUserController();
     }
 
     public void controlLogin(String email, String password) {
@@ -64,6 +97,31 @@ public class LoginPage extends AppCompatActivity {
 
                     if (state) {
                         Intent intent = new Intent(LoginPage.this, MainAreaPage.class);
+
+                        try {
+                            Log.i("LOGIN",
+                                    "NAME : " + user.getName() + " SURNAME : " + user.getSurname() +
+                                            " USERNAME : " + user.getUsername() + " EMAIL : " + email +
+                                            " PASSWORD : " + password + " ACCESSTOKEN : " + user.getAccessToken() +
+                                            " ACCESSTOKENEXP : " + user.getAccessTokenExpiration() +
+                                            " REFRESHTOKEN : " + user.getRefreshToken() +
+                                            " REFRESHTOKENEXP : " + user.getRefreshTokenExpiration() +
+                                            " REMEMBERME : " + user.getRememberMe());
+
+                            User user = User.getInstance();
+
+                            if (user.getRememberMe()) {
+                                userRoomController.updateUserInRoom(
+                                        user.getName(), user.getSurname(),
+                                        user.getUsername(), email, password,
+                                        user.getAccessToken(), user.getAccessTokenExpiration(),
+                                        user.getRefreshToken(), user.getRefreshTokenExpiration(),
+                                        user.getRememberMe());
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                         startActivity(intent);
                     } else {
                         if (errorHandlerModel.getLoginErrorMessage() != null && !errorHandlerModel.getLoginErrorMessage().equals("")) {
@@ -78,4 +136,29 @@ public class LoginPage extends AppCompatActivity {
                     }
                 });
     }
+
+    public void recordedUserController() {
+        try {
+            userRoomController = new UserRoomController(this);
+            UserEntity userFromRoom = userRoomController.getUserFromRoom();
+
+            if (userFromRoom != null) {
+                Log.i("LOGIN", "EMAIL : " + userFromRoom.getEmail());
+                Log.i("LOGIN", "PASS : " + userFromRoom.getPassword());
+                Log.i("LOGIN", "ACCESSTOKEN : " + userFromRoom.getAccessToken());
+
+                if (!pageNavigator.getFromPageName().equals("register")) {
+                    emailEditText.setText(userFromRoom.getEmail());
+                    passwordEditText.setText(userFromRoom.getPassword());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        pageNavigator.setFromPageName("login");
+    }
+
+    @Override
+    public void onBackPressed() {}
 }

@@ -10,9 +10,14 @@ import retrofit2.http.POST;
 public interface UserAPI {
     @Headers("Content-Type: application/json")
     @POST("api/user/createuser")
-    Call<ResponseBody> createUser(@Body RequestBody body);
+    Call<ResponseBody> Register(@Body RequestBody body);
 
     @Headers("Content-Type: application/json")
     @POST("api/auth/createtoken")
-    Call<ResponseBody> createToken(@Body RequestBody body);
+    Call<ResponseBody> Login(@Body RequestBody body);
+
+    @Headers("Content-Type: application/json")
+    @POST("api/auth/revokerefreshtoken")
+    Call<ResponseBody> Logout(@Body RequestBody body);
+
 }

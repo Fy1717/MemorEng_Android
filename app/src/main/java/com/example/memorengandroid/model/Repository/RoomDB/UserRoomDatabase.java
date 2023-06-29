@@ -16,16 +16,22 @@ public abstract class UserRoomDatabase extends RoomDatabase {
     private static UserRoomDatabase userRoomDatabase;
 
     public static synchronized UserRoomDatabase getDatabase(final Context context) {
-        if (userRoomDatabase == null) {
-            synchronized (UserRoomDatabase.class) {
-                if (userRoomDatabase == null) {
-                    userRoomDatabase = Room.databaseBuilder(context.getApplicationContext(),
-                                    UserRoomDatabase.class, "memoreng_database")
-                            .allowMainThreadQueries().build();
+        try {
+            if (userRoomDatabase == null) {
+                synchronized (UserRoomDatabase.class) {
+                    if (userRoomDatabase == null) {
+                        userRoomDatabase = Room.databaseBuilder(context.getApplicationContext(),
+                                        UserRoomDatabase.class, "memoreng_database")
+                                .allowMainThreadQueries().build();
+                    }
                 }
             }
+
+            return userRoomDatabase;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        return userRoomDatabase;
+        return null;
     }
 }

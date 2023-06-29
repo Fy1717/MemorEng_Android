@@ -18,6 +18,6 @@ public interface UserDao {
     @Query("SELECT * from user_table WHERE uid=1")
     UserEntity getUser();
 
-    @Delete
-    void delete(UserEntity userEntity);
+    @Query("DELETE from user_table")
+    void delete();
 }
