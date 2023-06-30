@@ -18,11 +18,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.memorengandroid.R;
+import com.example.memorengandroid.controller.FormValidator;
 import com.example.memorengandroid.model.PageNavigator;
 import com.example.memorengandroid.model.Repository.RoomDB.UserEntity;
 import com.example.memorengandroid.model.Repository.RoomDB.UserRoomController;
 import com.example.memorengandroid.model.User;
 import com.example.memorengandroid.service.Request.Login;
+import com.example.memorengandroid.service.Request.LoginAnonymous;
 import com.example.memorengandroid.service.Request.Register;
 
 public class LoginPage extends AppCompatActivity {
@@ -73,15 +75,18 @@ public class LoginPage extends AppCompatActivity {
                     user.setRememberMe(false);
                 }
 
-                LoginPage.this.runOnUiThread(new Runnable() {
-                    public void run() {
-                        loadingLayout.setVisibility(View.VISIBLE);
-                    }
-                });
+                String emailF = emailEditText.getText().toString().trim();
+                String passwordF = passwordEditText.getText().toString().trim();
 
-                controlLogin(
-                        emailEditText.getText().toString().trim(),
-                        passwordEditText.getText().toString().trim());
+                if (formController(emailF, passwordF)) {
+                    LoginPage.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            loadingLayout.setVisibility(View.VISIBLE);
+                        }
+                    });
+
+                    controlLogin(emailF, passwordF);
+                }
             }
         });
 
@@ -108,8 +113,6 @@ public class LoginPage extends AppCompatActivity {
                                             " REFRESHTOKENEXP : " + user.getRefreshTokenExpiration() +
                                             " REMEMBERME : " + user.getRememberMe());
 
-                            User user = User.getInstance();
-
                             if (user.getRememberMe()) {
                                 userRoomController.updateUserInRoom(
                                         user.getName(), user.getSurname(),
@@ -125,7 +128,7 @@ public class LoginPage extends AppCompatActivity {
                         startActivity(intent);
                     } else {
                         if (errorHandlerModel.getLoginErrorMessage() != null && !errorHandlerModel.getLoginErrorMessage().equals("")) {
-                            Toast.makeText(LoginPage.this, errorHandlerModel.getLoginErrorMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginPage.this, errorHandlerModel.getLoginErrorMessage(), Toast.LENGTH_SHORT).show();
                         }
 
                         LoginPage.this.runOnUiThread(new Runnable() {
@@ -135,6 +138,44 @@ public class LoginPage extends AppCompatActivity {
                         });
                     }
                 });
+    }
+
+    public void controlLoginAnonymous() {
+        LoginPage.this.runOnUiThread(new Runnable() {
+            public void run() {
+                loadingLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
+        LoginAnonymous model = new ViewModelProvider(this).get(LoginAnonymous.class);
+
+        model.getLoginAnonymousStatus()
+                .observe(this, state -> {
+                    Log.i("LOGIN_ANONYMOUS", "STATE : " + state);
+
+                    if (state) {
+                        loadingLayout.setVisibility(View.GONE);
+
+                        Intent intent = new Intent(LoginPage.this, MainAreaPage.class);
+                        startActivity(intent);
+                    } else {
+                        if (errorHandlerModel.getLoginErrorMessage() != null && !errorHandlerModel.getLoginErrorMessage().equals("")) {
+                            Toast.makeText(LoginPage.this, errorHandlerModel.getLoginErrorMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                        LoginPage.this.runOnUiThread(new Runnable() {
+                            public void run() {
+                                loadingLayout.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                });
+
+        LoginPage.this.runOnUiThread(new Runnable() {
+            public void run() {
+                loadingLayout.setVisibility(View.GONE);
+            }
+        });
     }
 
     public void recordedUserController() {
@@ -151,12 +192,30 @@ public class LoginPage extends AppCompatActivity {
                     emailEditText.setText(userFromRoom.getEmail());
                     passwordEditText.setText(userFromRoom.getPassword());
                 }
+            } else {
+                if (pageNavigator.getFromPageName().equals("login_anonymous")) {
+                    controlLoginAnonymous();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         pageNavigator.setFromPageName("login");
+    }
+
+    public Boolean formController(String email, String password) {
+        FormValidator formValidator = new FormValidator();
+
+        if (!formValidator.validateEmail(email)) {
+            emailEditText.setError("Geçerli bir e-posta adresi giriniz");
+            return false;
+        } else if (!formValidator.validatePassword(password)) {
+            passwordEditText.setError("En az (8 haneli, 1 büyük harf, 1 küçük harf, 1 sayı)");
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override

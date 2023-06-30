@@ -12,6 +12,7 @@ import com.example.memorengandroid.service.ApiModel.ErrorHandlerModel;
 import com.example.memorengandroid.service.ApiModel.UserResponseModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.security.KeyManagementException;
@@ -65,9 +66,9 @@ public class Register extends ViewModel {
                         Log.i("REGISTER", "RESPONSE : " + response.toString());
 
                         errorHandlerModel.setRegisterErrorMessage(null);
+                        Gson gson = new Gson();
 
                         if (response.isSuccessful()) {
-                            Gson gson = new Gson();
                             UserResponseModel result = gson.fromJson(response.body().string(), UserResponseModel.class);
 
                             ResponseBody myResponse = response.body();
@@ -104,20 +105,29 @@ public class Register extends ViewModel {
 
                                 status.setValue(true);
                             } catch (Exception e) {
-                                errorHandlerModel.setRegisterErrorMessage(defaultErrorMessage);
                                 Log.e("REGISTER", "ERROR0 : " + defaultErrorMessage);
+                                errorHandlerModel.setRegisterErrorMessage(defaultErrorMessage);
 
                                 status.setValue(false);
                             }
                         } else {
-                            errorHandlerModel.setRegisterErrorMessage(defaultErrorMessage);
-                            Log.e("REGISTER", "ERROR1 : " + defaultErrorMessage);
+                            ResponseBody myResponseErrorBody = response.errorBody();
+
+                            Log.e("REGISTER", "ERROR11 : " + myResponseErrorBody);
+
+                            JsonObject errorResult = gson.fromJson(myResponseErrorBody.string(), JsonObject.class);
+
+                            JsonArray errorData = (JsonArray) errorResult.get("errors");
+
+                            Log.e("REGISTER", "ERROR12 : " + errorData.toString());
+
+                            errorHandlerModel.setRegisterErrorMessage(errorData.get(0).toString().replaceAll("\"", ""));
 
                             status.setValue(false);
                         }
                     } catch (Exception e) {
-                        errorHandlerModel.setRegisterErrorMessage(defaultErrorMessage);
                         Log.e("REGISTER", "ERROR2 : " + e.getLocalizedMessage());
+                        errorHandlerModel.setRegisterErrorMessage(defaultErrorMessage);
 
                         status.setValue(false);
                     }
@@ -126,10 +136,15 @@ public class Register extends ViewModel {
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     Log.e("REGISTER", "ERROR3 : " + t.getLocalizedMessage());
+                    errorHandlerModel.setRegisterErrorMessage("Bağlantı problemi..");
+
+                    status.setValue(false);
                 }
             });
         } catch (Exception e) {
             Log.e("REGISTER", "ERROR4 : " + e.getLocalizedMessage());
+
+            status.setValue(false);
         }
     }
 

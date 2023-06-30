@@ -37,33 +37,33 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class Login extends ViewModel {
+public class LoginAnonymous extends ViewModel {
     MutableLiveData<Boolean> status = new MutableLiveData<>();
-    public static String defaultErrorMessage = "Kullanıcı girişi sırasında hata..";
+    public static String defaultErrorMessage = "Anonim girişi sırasında hata..";
     ErrorHandlerModel errorHandlerModel = ErrorHandlerModel.getInstance();
 
-    public LiveData<Boolean> getLoginStatus(String email, String password) {
-        login(email, password);
+    public LiveData<Boolean> getLoginAnonymousStatus() {
+        loginAnonymous("?Vj3N$:S5>zAJ-Nm5}&]:fB&-#JG82*J");
 
         return status;
     }
 
-    private void login(String email, String password) {
+    private void loginAnonymous(String secret) {
         try {
             errorHandlerModel.setLoginErrorMessage(null);
 
             UserAPI userAPI = createTrustAllRetrofit().create(UserAPI.class);
 
-            User user = new User(email, password);
-            RequestBody body = RequestBody.create(MediaType.parse("application/json"), user.toJsonForLogin());
+            User user = new User(secret);
+            RequestBody body = RequestBody.create(MediaType.parse("application/json"), user.toJsonForAnonymousLogin());
 
-            Call<ResponseBody> call = userAPI.Login(body);
+            Call<ResponseBody> call = userAPI.LoginAnonymous(body);
 
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
-                        Log.i("LOGIN", "RESPONSE : " + response.toString());
+                        Log.i("LOGIN_ANONYMOUS", "RESPONSE : " + response.toString());
 
                         errorHandlerModel.setLoginErrorMessage(null);
 
@@ -72,56 +72,42 @@ public class Login extends ViewModel {
                         if (response.isSuccessful()) {
                             ResponseBody myResponseBody = response.body();
 
-                            Log.i("LOGIN", "RESPONSE BODY: " + myResponseBody);
+                            Log.i("LOGIN_ANONYMOUS", "RESPONSE BODY: " + myResponseBody);
 
                             UserResponseModel result = gson.fromJson(myResponseBody.string(), UserResponseModel.class);
 
                             JsonObject data = result.getData();
 
-                            Log.i("LOGIN", "SUCCESS");
-
-                            System.out.println("LOGINMODEL STRING: " + myResponseBody.toString());
-                            System.out.println("LOGINMODEL DATA: " + result.getData());
+                            Log.i("LOGIN_ANONYMOUS", "SUCCESS");
 
                             try {
                                 String accessToken = String.valueOf(data.get("accessToken")).replaceAll("\"", "");
                                 String accessTokenExpiration = String.valueOf(data.get("accessTokenExpiration")).replaceAll("\"", "");
-                                String refreshTokenExpiration = String.valueOf(data.get("refreshTokenExpiration")).replaceAll("\"", "");
-                                String refreshToken = String.valueOf(data.get("refreshToken")).replaceAll("\"", "");
-
-                                System.out.println("LOGIN DATA TYPE: " + data.getClass());
-
-                                System.out.println("LOGIN accessToken: " + accessToken);
-                                System.out.println("LOGIN accessTokenExpiration: " + accessTokenExpiration);
-                                System.out.println("LOGIN refreshToken: " + refreshToken);
-                                System.out.println("LOGIN refreshTokenExpiration: " + refreshTokenExpiration);
 
                                 User user = User.getInstance();
 
-                                user.setRefreshToken(refreshToken);
                                 user.setAccessToken(accessToken);
                                 user.setAccessTokenExpiration(accessTokenExpiration);
-                                user.setRefreshTokenExpiration(refreshTokenExpiration);
 
                                 errorHandlerModel.setLoginErrorMessage(null);
 
                                 status.setValue(true);
                             } catch (Exception e) {
                                 errorHandlerModel.setLoginErrorMessage(defaultErrorMessage);
-                                Log.e("LOGIN", "ERROR0 : " + defaultErrorMessage);
+                                Log.e("LOGIN_ANONYMOUS", "ERROR0 : " + defaultErrorMessage);
 
                                 status.setValue(false);
                             }
                         } else {
                             ResponseBody myResponseErrorBody = response.errorBody();
 
-                            Log.e("LOGIN", "ERROR11 : " + myResponseErrorBody);
+                            Log.e("LOGIN_ANONYMOUS", "ERROR11 : " + myResponseErrorBody);
 
                             JsonObject errorResult = gson.fromJson(myResponseErrorBody.string(), JsonObject.class);
 
                             JsonArray errorData = (JsonArray) errorResult.get("errors");
 
-                            Log.e("LOGIN", "ERROR12 : " + errorData.toString());
+                            Log.e("LOGIN_ANONYMOUS", "ERROR12 : " + errorData.toString());
 
                             errorHandlerModel.setLoginErrorMessage(errorData.get(0).toString().replaceAll("\"", ""));
 
@@ -129,7 +115,7 @@ public class Login extends ViewModel {
                         }
                     } catch (Exception e) {
                         errorHandlerModel.setLoginErrorMessage(defaultErrorMessage);
-                        Log.e("LOGIN", "ERROR2 : " + e.getLocalizedMessage());
+                        Log.e("LOGIN_ANONYMOUS", "ERROR2 : " + e.getLocalizedMessage());
 
                         status.setValue(false);
                     }
@@ -137,7 +123,7 @@ public class Login extends ViewModel {
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Log.e("LOGIN", "ERROR3 : " + t.getLocalizedMessage());
+                    Log.e("LOGIN_ANONYMOUS", "ERROR3 : " + t.getLocalizedMessage());
 
                     errorHandlerModel.setLoginErrorMessage("Bağlantı Problemi..");
 
@@ -145,7 +131,7 @@ public class Login extends ViewModel {
                 }
             });
         } catch (Exception e) {
-            Log.e("LOGIN", "ERROR4 : " + e.getLocalizedMessage());
+            Log.e("LOGIN_ANONYMOUS", "ERROR4 : " + e.getLocalizedMessage());
 
             errorHandlerModel.setLoginErrorMessage(defaultErrorMessage);
 

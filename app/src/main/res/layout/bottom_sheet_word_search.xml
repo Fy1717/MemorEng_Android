@@ -27,7 +27,7 @@
         android:background="@drawable/edittext_border"
         android:hint="Aramak istediğiniz kelime.."
         android:text=""
-        android:inputType="textNoSuggestions"
+        android:inputType="text"
         android:textAlignment="center"
         android:textSize="20dp"
         android:textStyle="italic"

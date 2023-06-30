@@ -94,6 +94,8 @@ public class GetEnglish extends ViewModel {
                                 // -------------------------------
 
                                 System.out.println("RESULT ALL WORDS : " + englishWords.getAllWords());
+
+                                status.setValue(true);
                             }
                         } else {
                             errorHandlerModel.setGetEnglishWordsErrorMessage(defaultErrorMessage);
@@ -105,9 +107,9 @@ public class GetEnglish extends ViewModel {
                         errorHandlerModel.setGetEnglishWordsErrorMessage(defaultErrorMessage);
                         Log.e("ENGLISH", "ERROR2 : " + e.getLocalizedMessage());
 
-                        e.printStackTrace();
-
                         status.setValue(false);
+
+                        e.printStackTrace();
                     }
                 }
 
@@ -116,19 +118,18 @@ public class GetEnglish extends ViewModel {
                     Log.e("ENGLISH", "ERROR3 : " + t.getLocalizedMessage());
 
                     errorHandlerModel.setGetEnglishWordsErrorMessage(defaultErrorMessage);
-
+                    status.setValue(false);
                 }
             });
         } catch (Exception e) {
             Log.e("ENGLISH", "ERROR4 : " + e.getLocalizedMessage());
 
             errorHandlerModel.setGetEnglishWordsErrorMessage(defaultErrorMessage);
+            status.setValue(false);
         }
     }
 
     private Retrofit createTrustAllRetrofit() throws NoSuchAlgorithmException, KeyManagementException {
-        Gson gson = new GsonBuilder().setLenient().create();
-
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
 
         TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {

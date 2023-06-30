@@ -15,21 +15,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/page_modal"
-        android:padding="32dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingRight="32dp"
+        android:paddingLeft="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:src="@drawable/logo"
-            app:layout_constraintBottom_toTopOf="@+id/name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/name"
@@ -41,6 +34,7 @@
             android:text=""
             android:textAlignment="center"
             android:textSize="20dp"
+            android:inputType="text"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/surname"
             app:layout_constraintEnd_toEndOf="parent"
@@ -53,6 +47,7 @@
             android:background="@drawable/edittext_border"
             android:hint="Soyisim"
             android:text=""
+            android:inputType="text"
             android:textAlignment="center"
             android:textSize="20dp"
             android:textStyle="bold"
@@ -68,6 +63,7 @@
             android:background="@drawable/edittext_border"
             android:hint="Kullanıcı Adı"
             android:text=""
+            android:inputType="text"
             android:textAlignment="center"
             android:textSize="20dp"
             android:textStyle="bold"
@@ -103,6 +99,22 @@
             android:textAlignment="center"
             android:textSize="20dp"
             android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/passwordRepeat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/passwordRepeat"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/edittext_border"
+            android:hint="Parola Tekrarı"
+            android:inputType="textPassword"
+            android:text=""
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textStyle="bold"
             android:layout_marginBottom="30dp"
             app:layout_constraintBottom_toTopOf="@+id/registerButton"
             app:layout_constraintEnd_toEndOf="parent"
@@ -132,7 +144,7 @@
             android:layout_marginBottom="50dp"
             android:background="@drawable/button"
             android:gravity="center"
-            android:text="Kaydol"
+            android:text="Kayıt Ol"
             android:textColor="@color/white"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@+id/loginText"
@@ -145,11 +157,26 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Giriş Yap"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/purple_700"
+            app:layout_constraintBottom_toTopOf="@+id/unknownUserText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registerButton" />
+
+        <TextView
+            android:id="@+id/unknownUserText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Kayıt Olmadan Devam Et"
+            android:textStyle="bold"
             android:layout_marginTop="20dp"
             android:textColor="@color/purple_700"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerButton" />
+            app:layout_constraintTop_toBottomOf="@+id/loginText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

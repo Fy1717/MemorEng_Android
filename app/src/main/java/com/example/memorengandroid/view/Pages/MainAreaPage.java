@@ -23,10 +23,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 import com.example.memorengandroid.R;
 import com.example.memorengandroid.adapter.AreaAdapter;
 import com.example.memorengandroid.controller.WordFilter;
+import com.example.memorengandroid.model.EnglishWords;
 import com.example.memorengandroid.model.User;
 import com.example.memorengandroid.service.Request.GetEnglish;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
@@ -34,6 +36,8 @@ import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 public class MainAreaPage extends AppCompatActivity {
     Button searchWordButton, rightMenuButton;
     User user = User.getInstance();
+    EnglishWords englishWords = EnglishWords.getInstance();
+    SwipeRefreshLayout pullToRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,18 @@ public class MainAreaPage extends AppCompatActivity {
 
         Window window = getWindow();
         window.setStatusBarColor(Color.parseColor("#f0f1f2"));
+
+        pullToRefresh = findViewById(R.id.swipeRefreshLayout);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (englishWords.getAllWords() == null) {
+                    controlEnglishWords();
+                } else {
+                    pullToRefresh.setRefreshing(false);
+                }
+            }
+        });
 
         searchWordButton = findViewById(R.id.search_word_button);
         searchWordButton.setOnClickListener(v -> showDialog());
@@ -134,20 +150,27 @@ public class MainAreaPage extends AppCompatActivity {
             });
 
             TextView username = dialog.findViewById(R.id.username);
-            username.setText(user.getUsername().replaceAll("\"", ""));
+
+            try {
+                username.setText(user.getUsername().replaceAll("\"", ""));
+            } catch (Exception e) {
+                username.setText("UNKNOWN");
+
+                e.printStackTrace();
+            }
 
             dialog.show();
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.getWindow().getAttributes().windowAnimations = R.style.ProfileAnimation;
-            dialog.getWindow().setGravity(Gravity.BOTTOM);
+            dialog.getWindow().setGravity(Gravity.RIGHT);
         });
     }
 
     public void controlEnglishWords() {
-        GetEnglish model = new ViewModelProvider(this).get(GetEnglish.class);
-
         Log.i("USER-ENGLISH", user.getAccessToken());
+
+        GetEnglish model = new ViewModelProvider(this).get(GetEnglish.class);
 
         model.getEnglishStatus()
                 .observe(this, state -> {
@@ -164,6 +187,8 @@ public class MainAreaPage extends AppCompatActivity {
                         }
                     }
                 });
+
+        pullToRefresh.setRefreshing(false);
     }
 
     @Override

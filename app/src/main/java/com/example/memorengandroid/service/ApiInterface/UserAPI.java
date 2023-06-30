@@ -17,6 +17,10 @@ public interface UserAPI {
     Call<ResponseBody> Login(@Body RequestBody body);
 
     @Headers("Content-Type: application/json")
+    @POST("api/auth/createtokenbyclient")
+    Call<ResponseBody> LoginAnonymous(@Body RequestBody body);
+
+    @Headers("Content-Type: application/json")
     @POST("api/auth/revokerefreshtoken")
     Call<ResponseBody> Logout(@Body RequestBody body);
 

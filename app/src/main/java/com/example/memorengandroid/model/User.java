@@ -15,6 +15,10 @@ public class User {
 
     private static Boolean rememberMe;
 
+    private static Boolean isAnonymous;
+
+    private static String secret;
+
     private static User user;
 
     private User() {}
@@ -101,6 +105,21 @@ public class User {
         User.rememberMe = rememberMe;
     }
 
+    public static Boolean getIsAnonymous() {
+        return isAnonymous;
+    }
+
+    public static void setIsAnonymous(Boolean isAnonymous) {
+        User.isAnonymous = isAnonymous;
+    }
+
+    public static String getSecret() {
+        return secret;
+    }
+
+    public static void setSecret(String secret) {
+        User.secret = secret;
+    }
 
     public User(String name, String surname, String username, String email, String password) {
         this.name = name;
@@ -115,12 +134,20 @@ public class User {
         this.password = password;
     }
 
+    public User(String secret) {
+        this.secret = secret;
+    }
+
     public String toJsonForRegister() {
         return "{\"name\":\"" + name + "\",\"surname\":\"" + surname + "\",\"username\":\"" + username + "\",\"email\":\"" + email + "\",\"password\":\"" + password + "\"}";
     }
 
     public String toJsonForLogin() {
         return "{\"email\":\"" + email + "\",\"password\":\"" + password + "\"}";
+    }
+
+    public String toJsonForAnonymousLogin() {
+        return "{\"id\":\"" + "SpaApp" + "\",\"secret\":\"" + secret + "\"}";
     }
 
     public String toJsonForLogout() {
