@@ -103,6 +103,8 @@ public class LoginPage extends AppCompatActivity {
                     if (state) {
                         Intent intent = new Intent(LoginPage.this, MainAreaPage.class);
 
+                        user.setIsAnonymous(false);
+
                         try {
                             Log.i("LOGIN",
                                     "NAME : " + user.getName() + " SURNAME : " + user.getSurname() +
@@ -147,6 +149,12 @@ public class LoginPage extends AppCompatActivity {
             }
         });
 
+        emailEditText.setVisibility(View.GONE);
+        passwordEditText.setVisibility(View.GONE);
+        rememberMe.setVisibility(View.GONE);
+        registerText.setVisibility(View.GONE);
+        loginButton.setVisibility(View.GONE);
+
         LoginAnonymous model = new ViewModelProvider(this).get(LoginAnonymous.class);
 
         model.getLoginAnonymousStatus()
@@ -154,7 +162,16 @@ public class LoginPage extends AppCompatActivity {
                     Log.i("LOGIN_ANONYMOUS", "STATE : " + state);
 
                     if (state) {
-                        loadingLayout.setVisibility(View.GONE);
+                        LoginPage.this.runOnUiThread(new Runnable() {
+                            public void run() {
+                                loadingLayout.setVisibility(View.GONE);
+                                emailEditText.setVisibility(View.VISIBLE);
+                                passwordEditText.setVisibility(View.VISIBLE);
+                                rememberMe.setVisibility(View.VISIBLE);
+                                registerText.setVisibility(View.VISIBLE);
+                                loginButton.setVisibility(View.VISIBLE);
+                            }
+                        });
 
                         Intent intent = new Intent(LoginPage.this, MainAreaPage.class);
                         startActivity(intent);
@@ -162,20 +179,8 @@ public class LoginPage extends AppCompatActivity {
                         if (errorHandlerModel.getLoginErrorMessage() != null && !errorHandlerModel.getLoginErrorMessage().equals("")) {
                             Toast.makeText(LoginPage.this, errorHandlerModel.getLoginErrorMessage(), Toast.LENGTH_SHORT).show();
                         }
-
-                        LoginPage.this.runOnUiThread(new Runnable() {
-                            public void run() {
-                                loadingLayout.setVisibility(View.GONE);
-                            }
-                        });
                     }
                 });
-
-        LoginPage.this.runOnUiThread(new Runnable() {
-            public void run() {
-                loadingLayout.setVisibility(View.GONE);
-            }
-        });
     }
 
     public void recordedUserController() {

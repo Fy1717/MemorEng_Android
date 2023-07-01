@@ -90,8 +90,10 @@
 
         <EditText
             android:id="@+id/password"
-            android:layout_width="match_parent"
+            android:layout_width="280dp"
             android:layout_height="60dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/edittext_border"
             android:hint="Parola"
             android:inputType="textPassword"
@@ -99,10 +101,17 @@
             android:textAlignment="center"
             android:textSize="20dp"
             android:textStyle="bold"
-            android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toTopOf="@+id/passwordRepeat"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/password_eye"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/passwordeyeopen"
+            app:layout_constraintBottom_toBottomOf="@+id/password"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/password" />
 
         <EditText
             android:id="@+id/passwordRepeat"

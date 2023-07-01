@@ -10,6 +10,7 @@ import com.example.memorengandroid.model.User;
 import com.example.memorengandroid.service.ApiInterface.UserAPI;
 import com.example.memorengandroid.service.ApiModel.ErrorHandlerModel;
 import com.example.memorengandroid.service.ApiModel.UserResponseModel;
+import com.example.memorengandroid.service.SSLTrustModel.TrustAllCertificates;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -52,7 +53,8 @@ public class Register extends ViewModel {
         try {
             errorHandlerModel.setRegisterErrorMessage(null);
 
-            UserAPI userAPI = createTrustAllRetrofit().create(UserAPI.class);
+            UserAPI userAPI = new TrustAllCertificates(true).createTrustAllRetrofit()
+                    .create(UserAPI.class);
 
             User user = new User(name, surname, username, email, password);
             RequestBody body = RequestBody.create(MediaType.parse("application/json"), user.toJsonForRegister());
@@ -77,9 +79,6 @@ public class Register extends ViewModel {
 
                             Log.i("REGISTER", "SUCCESS");
 
-                            System.out.println("REGISTERMODEL STRING: " + myResponse.toString());
-                            System.out.println("REGISTERMODEL DATA: " + result.getData());
-
                             try {
                                 String id = String.valueOf(data.get("id"));
                                 String email = String.valueOf(data.get("email"));
@@ -87,11 +86,10 @@ public class Register extends ViewModel {
                                 String name = String.valueOf(data.get("name"));
                                 String surname = String.valueOf(data.get("surname"));
 
-                                System.out.println("REGISTER DATA TYPE: " + data.getClass());
-                                System.out.println("REGISTER email: " + email);
-                                System.out.println("REGISTER username: " + username);
-                                System.out.println("REGISTER name: " + name);
-                                System.out.println("REGISTER surname: " + surname);
+                                Log.i("REGISTER", "email: " + email);
+                                Log.i("REGISTER", "username: " + username);
+                                Log.i("REGISTER", "name: " + name);
+                                Log.i("REGISTER", "surname: " + surname);
 
                                 User user = User.getInstance();
 
@@ -146,52 +144,5 @@ public class Register extends ViewModel {
 
             status.setValue(false);
         }
-    }
-
-    private Retrofit createTrustAllRetrofit() throws NoSuchAlgorithmException, KeyManagementException {
-        Gson gson = new GsonBuilder().setLenient().create();
-
-        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
-
-        // Create a trust manager that trusts all certificates
-        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-            @Override
-            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-                // No client certificate validation needed
-            }
-
-            @Override
-            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-                // No server certificate validation needed
-            }
-
-            @Override
-            public X509Certificate[] getAcceptedIssuers() {
-                return new X509Certificate[0];
-            }
-        }};
-
-        // Create a SSL context with the custom trust manager
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, trustAllCerts, new SecureRandom());
-
-        // Set the custom SSL context to the client builder
-        clientBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0]);
-
-        // Allow all hostnames
-        clientBuilder.hostnameVerifier(new HostnameVerifier() {
-            @Override
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        });
-
-        OkHttpClient client = clientBuilder.build();
-
-        return new Retrofit.Builder()
-                .baseUrl("https://uat.api.memoreng.helloworldeducation.com/")
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
     }
 }

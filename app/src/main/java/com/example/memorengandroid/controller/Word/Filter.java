@@ -1,11 +1,11 @@
-package com.example.memorengandroid.controller;
+package com.example.memorengandroid.controller.Word;
 
 import com.example.memorengandroid.model.EnglishWord;
 import com.example.memorengandroid.model.EnglishWords;
 
 import java.util.Locale;
 
-public class WordFilter {
+public class Filter {
     EnglishWords englishWordList = EnglishWords.getInstance();
 
     public String filterString(String str) {

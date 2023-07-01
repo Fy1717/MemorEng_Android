@@ -10,6 +10,7 @@ import com.example.memorengandroid.model.User;
 import com.example.memorengandroid.service.ApiInterface.UserAPI;
 import com.example.memorengandroid.service.ApiModel.ErrorHandlerModel;
 import com.example.memorengandroid.service.ApiModel.UserResponseModel;
+import com.example.memorengandroid.service.SSLTrustModel.TrustAllCertificates;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -52,7 +53,8 @@ public class LoginAnonymous extends ViewModel {
         try {
             errorHandlerModel.setLoginErrorMessage(null);
 
-            UserAPI userAPI = createTrustAllRetrofit().create(UserAPI.class);
+            UserAPI userAPI = new TrustAllCertificates(true).createTrustAllRetrofit()
+                    .create(UserAPI.class);
 
             User user = new User(secret);
             RequestBody body = RequestBody.create(MediaType.parse("application/json"), user.toJsonForAnonymousLogin());
@@ -137,46 +139,5 @@ public class LoginAnonymous extends ViewModel {
 
             status.setValue(false);
         }
-    }
-
-    private Retrofit createTrustAllRetrofit() throws NoSuchAlgorithmException, KeyManagementException {
-        Gson gson = new GsonBuilder().setLenient().create();
-
-        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
-
-        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-            @Override
-            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-
-            @Override
-            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-
-            @Override
-            public X509Certificate[] getAcceptedIssuers() {
-                return new X509Certificate[0];
-            }
-        }};
-
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, trustAllCerts, new SecureRandom());
-
-        clientBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0]);
-
-        clientBuilder.hostnameVerifier(new HostnameVerifier() {
-            @Override
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        });
-
-        OkHttpClient client = clientBuilder.build();
-
-        return new Retrofit.Builder()
-                .baseUrl("https://uat.api.memoreng.helloworldeducation.com/")
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
     }
 }

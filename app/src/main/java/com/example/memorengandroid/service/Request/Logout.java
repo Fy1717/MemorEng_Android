@@ -10,6 +10,7 @@ import com.example.memorengandroid.model.User;
 import com.example.memorengandroid.service.ApiInterface.UserAPI;
 import com.example.memorengandroid.service.ApiModel.ErrorHandlerModel;
 import com.example.memorengandroid.service.ApiModel.UserResponseModel;
+import com.example.memorengandroid.service.SSLTrustModel.TrustAllCertificates;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -51,7 +52,8 @@ public class Logout extends ViewModel {
         try {
             errorHandlerModel.setLogoutErrorMessage(null);
 
-            UserAPI userAPI = createTrustAllRetrofit().create(UserAPI.class);
+            UserAPI userAPI = new TrustAllCertificates(false).createTrustAllRetrofit()
+                    .create(UserAPI.class);
 
             User user = User.getInstance();
             RequestBody body = RequestBody.create(MediaType.parse("application/json"), user.toJsonForLogout());
@@ -68,6 +70,8 @@ public class Logout extends ViewModel {
 
                         if (response.isSuccessful()) {
                             Log.i("LOGOUT", "SUCCESS");
+
+                            status.setValue(true);
                         } else {
                             errorHandlerModel.setLogoutErrorMessage(defaultErrorMessage);
                             Log.e("LOGOUT", "ERROR1 : " + defaultErrorMessage);
@@ -88,53 +92,15 @@ public class Logout extends ViewModel {
 
                     errorHandlerModel.setLogoutErrorMessage(defaultErrorMessage);
 
+                    status.setValue(false);
                 }
             });
         } catch (Exception e) {
             Log.e("LOGOUT", "ERROR4 : " + e.getLocalizedMessage());
 
             errorHandlerModel.setLogoutErrorMessage(defaultErrorMessage);
+
+            status.setValue(false);
         }
-    }
-
-    private Retrofit createTrustAllRetrofit() throws NoSuchAlgorithmException, KeyManagementException {
-        Gson gson = new GsonBuilder().setLenient().create();
-
-        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
-
-        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-            @Override
-            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-
-            @Override
-            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-
-            @Override
-            public X509Certificate[] getAcceptedIssuers() {
-                return new X509Certificate[0];
-            }
-        }};
-
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, trustAllCerts, new SecureRandom());
-
-        clientBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0]);
-
-        clientBuilder.hostnameVerifier(new HostnameVerifier() {
-            @Override
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        });
-
-        OkHttpClient client = clientBuilder.build();
-
-        return new Retrofit.Builder()
-                .baseUrl("https://uat.api.memoreng.helloworldeducation.com/")
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
     }
 }

@@ -12,6 +12,7 @@ import com.example.memorengandroid.model.User;
 import com.example.memorengandroid.service.ApiInterface.WordAPI;
 import com.example.memorengandroid.service.ApiModel.ErrorHandlerModel;
 import com.example.memorengandroid.service.ApiModel.WordsResponseModel;
+import com.example.memorengandroid.service.SSLTrustModel.TrustAllCertificates;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -54,7 +55,8 @@ public class GetEnglish extends ViewModel {
         try {
             errorHandlerModel.setGetEnglishWordsErrorMessage(null);
 
-            WordAPI wordAPI = createTrustAllRetrofit().create(WordAPI.class);
+            WordAPI wordAPI = new TrustAllCertificates(false).createTrustAllRetrofit()
+                    .create(WordAPI.class);
 
             User user = User.getInstance();
 
@@ -93,7 +95,7 @@ public class GetEnglish extends ViewModel {
                                 englishWords.setAllWords(englishWordList);
                                 // -------------------------------
 
-                                System.out.println("RESULT ALL WORDS : " + englishWords.getAllWords());
+                                Log.i("WORDS", "List : " + englishWords.getAllWords());
 
                                 status.setValue(true);
                             }
@@ -127,44 +129,5 @@ public class GetEnglish extends ViewModel {
             errorHandlerModel.setGetEnglishWordsErrorMessage(defaultErrorMessage);
             status.setValue(false);
         }
-    }
-
-    private Retrofit createTrustAllRetrofit() throws NoSuchAlgorithmException, KeyManagementException {
-        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
-
-        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-            @Override
-            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-
-            @Override
-            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-            }
-
-            @Override
-            public X509Certificate[] getAcceptedIssuers() {
-                return new X509Certificate[0];
-            }
-        }};
-
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, trustAllCerts, new SecureRandom());
-
-        clientBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0]);
-
-        clientBuilder.hostnameVerifier(new HostnameVerifier() {
-            @Override
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        });
-
-        OkHttpClient client = clientBuilder.build();
-
-        return new Retrofit.Builder()
-                .baseUrl("https://uat.api.memoreng.helloworldeducation.com/")
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
     }
 }

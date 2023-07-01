@@ -14,7 +14,7 @@
     </style>
 
     <style name="ProfileAnimation">
-        <item name="android:windowEnterAnimation">@anim/slide_out_bottom</item>
-        <item name="android:windowExitAnimation">@anim/slide_to_right</item>
+        <item name="android:windowExitAnimation">@anim/slide_to_left</item>
+        <item name="android:windowEnterAnimation">@anim/slide_to_right</item>
     </style>
 </resources>
