@@ -20,10 +20,6 @@ public class WordFilter {
 
             if (englishWordList.getAllWords() != null) {
                 for (EnglishWord myWord: englishWordList.getAllWords()) {
-                    System.out.println("NEW TEXT22 :: " +
-                            myWord.getWord().toUpperCase(Locale.ROOT) +
-                            " :: " + str);
-
                     if (resultCount < 4 && (myWord.getWord().toUpperCase(Locale.ROOT).contains(str) ||
                             myWord.getTranslations().get(0).toUpperCase(Locale.ROOT).contains(str))) {
 
