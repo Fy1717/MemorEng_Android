@@ -2,14 +2,19 @@ package com.example.memorengandroid.view.Pages;
 
 import static com.example.memorengandroid.service.ApiModel.ErrorHandlerModel.errorHandlerModel;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +37,7 @@ public class RegisterPage extends AppCompatActivity {
     TextView loginText, unknownUserText;
     EditText nameEditText, surnameEditText, usernameEditText,
             emailEditText, passwordEditText, passwordRepeatEditText;
+    ImageView passwordEye, passwordRepeatEye;
     UserRoomController userRoomController;
     PageNavigator pageNavigator = PageNavigator.getInstance();
     User user = User.getInstance();
@@ -63,6 +69,45 @@ public class RegisterPage extends AppCompatActivity {
         emailEditText = findViewById(R.id.email);
         passwordEditText = findViewById(R.id.password);
         passwordRepeatEditText = findViewById(R.id.passwordRepeat);
+        passwordEye = findViewById(R.id.password_eye);
+        passwordRepeatEye = findViewById(R.id.password_repeat_eye);
+
+        passwordEye.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        passwordEditText.setTransformationMethod(null);
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        passwordEditText.setTransformationMethod(new PasswordTransformationMethod());
+                        return true;
+                }
+                return false;
+            }
+        });
+
+
+        passwordRepeatEye.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Show the password
+                        passwordRepeatEditText.setTransformationMethod(null);
+
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        // Hide the password
+                        passwordRepeatEditText.setTransformationMethod(new PasswordTransformationMethod());
+
+                        return true;
+                }
+                return false;
+            }
+        });
 
         loginText = findViewById(R.id.loginText);
         loginText.setOnClickListener(new View.OnClickListener() {
