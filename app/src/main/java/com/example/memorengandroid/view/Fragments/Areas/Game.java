@@ -1,16 +1,21 @@
 package com.example.memorengandroid.view.Fragments.Areas;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.memorengandroid.R;
+import com.example.memorengandroid.view.Pages.Games.FillBlanks;
 
 
 public class Game extends Fragment {
+    View fillBlanks;
 
     public Game() {
         // Required empty public constructor
@@ -27,5 +32,20 @@ public class Game extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_game, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        fillBlanks = view.findViewById(R.id.game_fill_blanks);
+
+        fillBlanks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FillBlanks.class);
+                startActivity(intent);
+            }
+        });
     }
 }

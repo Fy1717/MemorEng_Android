@@ -34,16 +34,16 @@ import com.example.memorengandroid.service.Request.Register;
 
 public class LoginPage extends AppCompatActivity {
     Button loginButton;
-    View loadingLayout;
+    View loadingLayout, passwordLayout, rememberMeArea;
     EditText emailEditText, passwordEditText;
     CheckBox rememberMe;
     TextView registerText;
     ImageView passwordEye;
-
     UserRoomController userRoomController;
     User user = User.getInstance();
     PageNavigator pageNavigator = PageNavigator.getInstance();
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,10 +56,11 @@ public class LoginPage extends AppCompatActivity {
         passwordEditText = findViewById(R.id.password);
         rememberMe = findViewById(R.id.checkBoxRemember);
         registerText = findViewById(R.id.registerText);
+        rememberMeArea = findViewById(R.id.rememberLinear);
+        passwordLayout = findViewById(R.id.passwordLayout);
         passwordEye = findViewById(R.id.password_eye);
 
         passwordEye.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
@@ -177,6 +178,8 @@ public class LoginPage extends AppCompatActivity {
         rememberMe.setVisibility(View.GONE);
         registerText.setVisibility(View.GONE);
         loginButton.setVisibility(View.GONE);
+        passwordLayout.setVisibility(View.GONE);
+        rememberMeArea.setVisibility(View.GONE);
 
         LoginAnonymous model = new ViewModelProvider(this).get(LoginAnonymous.class);
 
@@ -193,6 +196,8 @@ public class LoginPage extends AppCompatActivity {
                                 rememberMe.setVisibility(View.VISIBLE);
                                 registerText.setVisibility(View.VISIBLE);
                                 loginButton.setVisibility(View.VISIBLE);
+                                passwordLayout.setVisibility(View.VISIBLE);
+                                rememberMeArea.setVisibility(View.VISIBLE);
                             }
                         });
 
