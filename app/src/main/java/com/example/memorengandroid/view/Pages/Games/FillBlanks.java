@@ -24,7 +24,8 @@ import java.util.Locale;
 import java.util.Random;
 
 public class FillBlanks extends AppCompatActivity {
-    public static TextView question, showanswer, countOfQuestion;
+    public static TextView question, countOfQuestion;
+    public static View showAnswer, getHintOfAnswer;
     public static EditText usersAnswer;
     public static Button approve;
     public static ImageView closeicon;
@@ -35,6 +36,7 @@ public class FillBlanks extends AppCompatActivity {
     CustomAlertBox customAlertBox = new CustomAlertBox(this);
     EnglishWords englishWordList = EnglishWords.getInstance();
     EnglishWord englishWord;
+    String lastWrongAnsweredQuestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,8 @@ public class FillBlanks extends AppCompatActivity {
         window.setStatusBarColor(Color.parseColor("#f0f1f2"));
 
         question = (TextView) findViewById(R.id.question);
-        showanswer = (TextView) findViewById(R.id.showanswer);
+        showAnswer = (View) findViewById(R.id.viewQuestionsAnswer);
+        getHintOfAnswer = (View) findViewById(R.id.getQuestionHintArea);
         usersAnswer = (EditText)findViewById(R.id.answer);
         approve = (Button)findViewById(R.id.approve);
         closeicon = (ImageView) findViewById(R.id.closeicon);
@@ -66,12 +69,20 @@ public class FillBlanks extends AppCompatActivity {
             }
         });
 
-        showanswer.setOnClickListener(new View.OnClickListener() {
+        showAnswer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 usersAnswer.setText(answerOfQuestion);
                 usersAnswer.setSelection(usersAnswer.getText().length());
                 answerOfUser = answerOfQuestion;
+            }
+        });
+
+        getHintOfAnswer.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                getQuestionHint();
             }
         });
 
@@ -102,19 +113,22 @@ public class FillBlanks extends AppCompatActivity {
         } else {
             FillBlanks.this.runOnUiThread(new Runnable() {
                 public void run() {
-                    customAlertBox.OpenAlertBoxError(FillBlanks.this, "Yanlış cevap..");
+                    lastWrongAnsweredQuestion = "Yanlış Cevap..\n\n Soru: " + englishWord.getWord() +
+                            "\nCevap: " + englishWord.getTranslations().get(0) +
+                            "\nCevabınız: " + answerOfUser;
+
+                    customAlertBox.OpenAlertBoxError(FillBlanks.this, lastWrongAnsweredQuestion);
                 }
             });
 
             usersAnswer.setText("");
-            //usersAnswer.setHint(answerOfQuestion.substring(0, 1) + Strings.repeat("*", answerOfQuestion.length() - 1));
             usersAnswer.requestFocus();
-
-            showanswer.setVisibility(View.VISIBLE);
+            showAnswer.setVisibility(View.VISIBLE);
         }
 
-        if (totalAnsweredWords > 20) {
+        if (totalAnsweredWords > 19) {
             customAlertBox.OpenAlertBoxExit(FillBlanks.this, "Soruları tamamladınız.. Tekrarlamak ister misiniz? ", false);
+            totalAnsweredWords = 0;
         } else {
             setNewQuestionToUi();
         }
@@ -132,7 +146,7 @@ public class FillBlanks extends AppCompatActivity {
             Random r = new Random();
 
             int low = 0;
-            int high = englishWordList.getAllWords().size();
+            int high = englishWordList.getAllWords().size() - 1;
             int result = r.nextInt(high-low) + low;
 
             return englishWordList.getAllWords().get(result);
@@ -179,5 +193,10 @@ public class FillBlanks extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    public void getQuestionHint() {
+        usersAnswer.setText("");
+        usersAnswer.setHint(answerOfQuestion.substring(0, 1) + Strings.repeat("*", answerOfQuestion.length() - 1));
     }
 }

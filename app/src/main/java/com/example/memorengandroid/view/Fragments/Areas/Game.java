@@ -12,10 +12,11 @@ import androidx.fragment.app.Fragment;
 
 import com.example.memorengandroid.R;
 import com.example.memorengandroid.view.Pages.Games.FillBlanks;
+import com.example.memorengandroid.view.Pages.Games.Wordle;
 
 
 public class Game extends Fragment {
-    View fillBlanks;
+    View fillBlanks, wordle;
 
     public Game() {
         // Required empty public constructor
@@ -39,11 +40,21 @@ public class Game extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         fillBlanks = view.findViewById(R.id.game_fill_blanks);
+        wordle = view.findViewById(R.id.game_wordle);
+
 
         fillBlanks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), FillBlanks.class);
+                startActivity(intent);
+            }
+        });
+
+        wordle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), Wordle.class);
                 startActivity(intent);
             }
         });

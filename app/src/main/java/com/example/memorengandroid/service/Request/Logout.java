@@ -13,6 +13,7 @@ import com.example.memorengandroid.service.ApiModel.UserResponseModel;
 import com.example.memorengandroid.service.SSLTrustModel.TrustAllCertificates;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.security.KeyManagementException;
@@ -68,17 +69,32 @@ public class Logout extends ViewModel {
 
                         errorHandlerModel.setLogoutErrorMessage(null);
 
+                        Gson gson = new Gson();
+
                         if (response.isSuccessful()) {
                             Log.i("LOGOUT", "SUCCESS");
 
                             status.setValue(true);
                         } else {
-                            errorHandlerModel.setLogoutErrorMessage(defaultErrorMessage);
+                            ResponseBody myResponseErrorBody = response.errorBody();
+
+                            Log.e("LOGOUT", "ERROR11 : " + myResponseErrorBody.string());
+
+                            JsonObject errorResult = gson.fromJson(myResponseErrorBody.string(), JsonObject.class);
+
+                            JsonArray errorData = (JsonArray) errorResult.get("errors");
+
+                            Log.e("LOGOUT", "ERROR12 : " + errorData.toString());
+
+                            errorHandlerModel.setLogoutErrorMessage(errorData.get(0).toString().replaceAll("\"", ""));
+
                             Log.e("LOGOUT", "ERROR1 : " + defaultErrorMessage);
 
                             status.setValue(false);
                         }
                     } catch (Exception e) {
+                        e.printStackTrace();
+
                         errorHandlerModel.setLogoutErrorMessage(defaultErrorMessage);
                         Log.e("LOGOUT", "ERROR2 : " + e.getLocalizedMessage());
 
@@ -96,6 +112,8 @@ public class Logout extends ViewModel {
                 }
             });
         } catch (Exception e) {
+            e.printStackTrace();
+
             Log.e("LOGOUT", "ERROR4 : " + e.getLocalizedMessage());
 
             errorHandlerModel.setLogoutErrorMessage(defaultErrorMessage);

@@ -116,6 +116,8 @@ public class LoginAnonymous extends ViewModel {
                             status.setValue(false);
                         }
                     } catch (Exception e) {
+                        e.printStackTrace();
+
                         errorHandlerModel.setLoginErrorMessage(defaultErrorMessage);
                         Log.e("LOGIN_ANONYMOUS", "ERROR2 : " + e.getLocalizedMessage());
 
@@ -125,6 +127,8 @@ public class LoginAnonymous extends ViewModel {
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    t.printStackTrace();
+
                     Log.e("LOGIN_ANONYMOUS", "ERROR3 : " + t.getLocalizedMessage());
 
                     errorHandlerModel.setLoginErrorMessage("Bağlantı Problemi..");

@@ -40,8 +40,12 @@ public class CustomAlertBox {
                 });
 
         builder.setPositiveButton("Evet", (DialogInterface.OnClickListener) (dialog, which) -> {
-            Intent intent = new Intent(context, MainAreaPage.class);
-            context.startActivity(intent);
+            if (Exit) {
+                Intent intent = new Intent(context, MainAreaPage.class);
+                context.startActivity(intent);
+            } else {
+                dialog.cancel();
+            }
         });
 
         AlertDialog alertDialog = builder.create();

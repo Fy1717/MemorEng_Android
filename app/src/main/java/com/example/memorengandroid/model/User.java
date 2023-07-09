@@ -1,5 +1,7 @@
 package com.example.memorengandroid.model;
 
+import android.util.Log;
+
 public class User {
     private static String id;
     private static String email;
@@ -151,6 +153,8 @@ public class User {
     }
 
     public String toJsonForLogout() {
+        Log.i("USER-RT", String.valueOf(refreshToken));
+
         return "{\"token\":\"" + refreshToken + "\"}";
     }
 }

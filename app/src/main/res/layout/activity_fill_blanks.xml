@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.Pages.Games.FillBlanks"
-    android:background="#f0f1f2"
-    android:padding="16dp">
+    android:layout_margin="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -90,18 +89,68 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <TextView
-            android:id="@+id/showanswer"
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/viewQuestionsAnswer"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cevabı göster"
-            android:layout_marginTop="15dp"
-            android:textSize="15dp"
-            android:textStyle="bold"
-            android:textColor="@color/red"
-            android:textAlignment="center"
+            android:layout_marginTop="25dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/approve" />
+            app:layout_constraintTop_toBottomOf="@+id/approve">
+
+            <TextView
+                android:id="@+id/showanswer"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="Cevabı göster"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/showanswerimage"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/showanswer"
+                app:layout_constraintStart_toEndOf="@+id/showanswer"
+                app:layout_constraintTop_toTopOf="@+id/showanswer"
+                app:srcCompat="@drawable/passwordeyeopen" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/getQuestionHintArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/getQuestionHint"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="İpucu"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/getQuestionHintImage"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:background="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/getQuestionHint"
+                app:layout_constraintStart_toEndOf="@+id/getQuestionHint"
+                app:layout_constraintTop_toTopOf="@+id/getQuestionHint"
+                app:srcCompat="@android:drawable/ic_dialog_info" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

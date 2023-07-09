@@ -206,6 +206,15 @@ public class LoginPage extends AppCompatActivity {
                     } else {
                         if (errorHandlerModel.getLoginErrorMessage() != null && !errorHandlerModel.getLoginErrorMessage().equals("")) {
                             Toast.makeText(LoginPage.this, errorHandlerModel.getLoginErrorMessage(), Toast.LENGTH_SHORT).show();
+
+                            loadingLayout.setVisibility(View.GONE);
+                            emailEditText.setVisibility(View.VISIBLE);
+                            passwordEditText.setVisibility(View.VISIBLE);
+                            rememberMe.setVisibility(View.VISIBLE);
+                            registerText.setVisibility(View.VISIBLE);
+                            loginButton.setVisibility(View.VISIBLE);
+                            passwordLayout.setVisibility(View.VISIBLE);
+                            rememberMeArea.setVisibility(View.VISIBLE);
                         }
                     }
                 });

@@ -63,6 +63,8 @@ public class MainAreaPage extends AppCompatActivity {
 
         setViewPager();
         controlEnglishWords();
+
+        // TODO : add
         //notificationChannel();
         setRefreshing();
     }
@@ -195,6 +197,7 @@ public class MainAreaPage extends AppCompatActivity {
         pullToRefresh.setRefreshing(false);
     }
 
+    // TODO : add
     public void notificationChannel() {
         if (englishWords.getAllWords() == null) {
             SetupNotification channel = new SetupNotification(this);
@@ -220,7 +223,7 @@ public class MainAreaPage extends AppCompatActivity {
         Logout logoutModel = new ViewModelProvider(this).get(Logout.class);
 
         user.setAccessToken(null);
-        user.setRefreshToken(null);
+        //user.setRefreshToken(null);
         user.setEmail(null);
         user.setUsername(null);
         user.setName(null);
@@ -234,7 +237,10 @@ public class MainAreaPage extends AppCompatActivity {
         userRoomController.deleteUserInRoom();
 
         logoutModel.getLogoutStatus()
-                .observe(this, state -> {if (state) {}});
+                .observe(this, state -> {
+                    if (state) {
+                        user.setRefreshToken(null);
+                    }});
     }
 
     @Override

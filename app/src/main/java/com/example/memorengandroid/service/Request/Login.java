@@ -91,11 +91,12 @@ public class Login extends ViewModel {
                                 Log.i("LOGIN", "accessToken : " + accessToken);
                                 Log.i("LOGIN", "accessTokenExpiration : " + accessTokenExpiration);
                                 Log.i("LOGIN", "refreshTokenExpiration : " + refreshTokenExpiration);
+                                Log.i("LOGIN", "refreshToken : " + refreshToken);
 
                                 User user = User.getInstance();
 
-                                user.setRefreshToken(refreshToken);
                                 user.setAccessToken(accessToken);
+                                user.setRefreshToken(refreshToken);
                                 user.setAccessTokenExpiration(accessTokenExpiration);
                                 user.setRefreshTokenExpiration(refreshTokenExpiration);
 
@@ -103,6 +104,16 @@ public class Login extends ViewModel {
 
                                 status.setValue(true);
                             } catch (Exception e) {
+                                ResponseBody myResponseErrorBody = response.errorBody();
+
+                                Log.e("LOGIN", "ERROR11 : " + myResponseErrorBody);
+
+                                JsonObject errorResult = gson.fromJson(myResponseErrorBody.string(), JsonObject.class);
+
+                                JsonArray errorData = (JsonArray) errorResult.get("errors");
+
+                                Log.e("LOGIN", "ERROR12 : " + errorData.toString());
+
                                 errorHandlerModel.setLoginErrorMessage(defaultErrorMessage);
                                 Log.e("LOGIN", "ERROR0 : " + defaultErrorMessage);
 
