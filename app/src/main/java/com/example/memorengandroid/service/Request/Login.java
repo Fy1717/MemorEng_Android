@@ -128,7 +128,7 @@ public class Login extends ViewModel {
 
                             JsonArray errorData = (JsonArray) errorResult.get("errors");
 
-                            Log.e("LOGIN", "ERROR12 : " + errorData.toString());
+                            Log.e("LOGIN", "ERROR121 : " + errorData.toString());
 
                             errorHandlerModel.setLoginErrorMessage(errorData.get(0).toString().replaceAll("\"", ""));
 
