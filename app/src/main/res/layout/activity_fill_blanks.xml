@@ -78,7 +78,6 @@
             android:text="ONAYLA"
             android:layout_width="270dp"
             android:layout_height="60dp"
-            android:onClick="login"
             android:background="@drawable/button"
             android:gravity="center"
             android:textColor="@color/white"
