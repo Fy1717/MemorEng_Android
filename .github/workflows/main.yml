@@ -24,11 +24,20 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
 
-    - name: Generate app APK
+    - name: Generate app Release APK
       run: ./gradlew assembleRelease --stacktrace
 
-    - name: Upload APK artifact
+    - name: Generate app Debug APK
+      run: ./gradlew assembleDebug --stacktrace
+
+    - name: Upload Release APK artifact
       uses: actions/upload-artifact@v2
       with:
         name: Release APK
         path: app/build/outputs/apk/release/app-release.apk
+
+    - name: Upload Debug APK artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: Debug APK
+        path: app/build/outputs/apk/debug/app-debug.apk
