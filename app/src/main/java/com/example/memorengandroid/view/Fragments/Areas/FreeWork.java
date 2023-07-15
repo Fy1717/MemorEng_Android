@@ -95,7 +95,6 @@ public class FreeWork extends Fragment {
                     refreshRunnable = null;
                 }
             } catch (Exception e) {
-                System.out.println("XXXXXXXXXXXXXXXXXXXXXXXX");
                 e.printStackTrace();
             }
         }

@@ -2,28 +2,20 @@ package com.example.memorengandroid.view.Pages.Games;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import com.example.memorengandroid.R;
 import com.example.memorengandroid.adapter.CustomAlertBox;
-import com.example.memorengandroid.model.Game.ButtonData;
 import com.example.memorengandroid.model.Game.WordleGame;
-import com.example.memorengandroid.view.Fragments.Areas.Game;
-import com.google.gson.JsonObject;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Wordle extends AppCompatActivity {
+    public int step = 1;
     EditText line1Box1, line1Box2, line1Box3, line1Box4, line1Box5,
             line2Box1, line2Box2, line2Box3, line2Box4, line2Box5,
             line3Box1, line3Box2, line3Box3, line3Box4, line3Box5,
@@ -31,7 +23,8 @@ public class Wordle extends AppCompatActivity {
             line5Box1, line5Box2, line5Box3, line5Box4, line5Box5;
     Button letterQ, letterW, letterE, letterR, letterT, letterY, letterU, letterI, letterO, letterP,
             letterA, letterS, letterD, letterF, letterG, letterH, letterJ, letterK, letterL,
-            letterZ, letterX, letterC, letterV, letterB, letterN, letterM, letterDelete;
+            letterZ, letterX, letterC, letterV, letterB, letterN, letterM, letterDelete,
+            approveButton;
 
     List<Button> letterButtons = new ArrayList<Button>();
     ImageView closeicon;
@@ -94,6 +87,15 @@ public class Wordle extends AppCompatActivity {
                 letterR, letterS, letterT, letterU, letterV, letterY, letterZ, letterX,
                 letterQ, letterW);
 
+        approveButton = findViewById(R.id.approve_button);
+        approveButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                stepController();
+            }
+        });
+
         setUpGame();
 
         letterDelete = findViewById(R.id.delete_button);
@@ -102,11 +104,27 @@ public class Wordle extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                if (activeBoxIndex >= 1) {
-                    activeBoxIndex -= 1;
+                if (uiControllerWithSteps(updateBox, true)) {
+                    System.out.println("xxx activeBoxIndex : " + activeBoxIndex);
+                    System.out.println("xxx updateBox : " + updateBox);
 
-                    updateBox = game.getBoxes().get(activeBoxIndex);
-                    updateBox.setText("");
+                    if (activeBoxIndex >= 1) {
+                        if (activeBoxIndex == 24 || activeBoxIndex == 23 || activeBoxIndex == 22
+                                || activeBoxIndex == 21 || activeBoxIndex == 20) {
+                            System.out.println("LLLLLLLL");
+
+                            updateBox = game.getBoxes().get(activeBoxIndex);
+                            updateBox.setText("");
+
+                            activeBoxIndex -= 1;
+                        } else {
+                            System.out.println("SSSSSSS");
+                            activeBoxIndex -= 1;
+
+                            updateBox = game.getBoxes().get(activeBoxIndex);
+                            updateBox.setText("");
+                        }
+                    }
                 }
             }
         });
@@ -162,13 +180,15 @@ public class Wordle extends AppCompatActivity {
                 public void onClick(View v) {
                     System.out.println(button.getText().toString());
 
-                    updateBox.setText(button.getText().toString());
+                    if (uiControllerWithSteps(updateBox, false)) {
+                        updateBox.setText(button.getText().toString());
 
-                    if (activeBoxIndex < game.getBoxes().size() - 1) {
-                        activeBoxIndex += 1;
+                        if (activeBoxIndex < game.getBoxes().size() - 1) {
+                            activeBoxIndex += 1;
+                        }
+
+                        updateBox = game.getBoxes().get(activeBoxIndex);
                     }
-
-                    updateBox = game.getBoxes().get(activeBoxIndex);
                 }
             });
         }
@@ -183,5 +203,107 @@ public class Wordle extends AppCompatActivity {
 
         System.out.println("YYYY : " + game.getBoxes().size());
         System.out.println("YYYY : " + game.getBoxes().get(activeBoxIndex).getText().toString());
+    }
+
+    public Boolean uiControllerWithSteps(EditText updateBox, boolean forDelete) {
+        System.out.println("A : STEP : " + step);
+        System.out.println("A : UPDATEBOX : " + updateBox + " : " + updateBox.getText());
+
+        if (step == 1 && !forDelete) {
+            if (updateBox == line1Box1 || updateBox == line1Box2 || updateBox == line1Box3 ||
+                    updateBox == line1Box4 || updateBox == line1Box5) {
+                return true;
+            }
+        } else if (step == 1 && forDelete) {
+            if (updateBox == line1Box1 || updateBox == line1Box2 || updateBox == line1Box3 ||
+                    updateBox == line1Box4 || updateBox == line1Box5 || updateBox == line2Box1) {
+                return true;
+            }
+        }
+
+        if (step == 2 && !forDelete) {
+            if (updateBox == line2Box1 || updateBox == line2Box2 || updateBox == line2Box3 ||
+                    updateBox == line2Box4 || updateBox == line2Box5) {
+                return true;
+            }
+        } else if (step == 2 && forDelete) {
+            if (updateBox == line2Box2 || updateBox == line2Box3 ||
+                    updateBox == line2Box4 || updateBox == line2Box5 || updateBox == line3Box1) {
+                return true;
+            }
+        }
+
+        if (step == 3 && !forDelete) {
+            if (updateBox == line3Box1 || updateBox == line3Box2 || updateBox == line3Box3 ||
+                    updateBox == line3Box4 || updateBox == line3Box5) {
+                return true;
+            }
+        } else if (step == 3 && forDelete) {
+            if (updateBox == line3Box2 || updateBox == line3Box3 ||
+                    updateBox == line3Box4 || updateBox == line3Box5 || updateBox == line4Box1) {
+                return true;
+            }
+        }
+
+        if (step == 4 && !forDelete) {
+            if (updateBox == line4Box1 || updateBox == line4Box2 || updateBox == line4Box3 ||
+                    updateBox == line4Box4 || updateBox == line4Box5) {
+                return true;
+            }
+        } else if (step == 4 && forDelete) {
+            if (updateBox == line4Box2 || updateBox == line4Box3 ||
+                    updateBox == line4Box4 || updateBox == line4Box5 || updateBox == line5Box1) {
+                return true;
+            }
+        }
+
+        if (step == 5 && !forDelete) {
+            if (updateBox == line5Box1 || updateBox == line5Box2 || updateBox == line5Box3 ||
+                    updateBox == line5Box4 || updateBox == line5Box5) {
+                return true;
+            }
+        } else if (step == 5 && forDelete) {
+            if (updateBox == line5Box2 || updateBox == line5Box3 ||
+                    updateBox == line5Box4 || updateBox == line5Box5) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void stepController() {
+        System.out.println("STEP : " + step);
+        System.out.println("UPDATEBOX : " + updateBox + " : " + updateBox.getText());
+
+        if (step == 1) {
+            if (updateBox == line2Box1) {
+                step = 2;
+            }
+        }
+
+        if (step == 2) {
+            if (updateBox == line3Box1) {
+                step = 3;
+            }
+        }
+
+        if (step == 3) {
+            if (updateBox == line4Box1) {
+                step = 4;
+            }
+        }
+
+        if (step == 4) {
+            if (updateBox == line5Box1) {
+                step = 5;
+            }
+        }
+
+        if (step == 5) {
+            if (updateBox == line5Box5) {
+                System.out.println("END OF GAME");
+            }
+        }
     }
 }
