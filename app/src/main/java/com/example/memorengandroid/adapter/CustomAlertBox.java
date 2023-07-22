@@ -52,6 +52,33 @@ public class CustomAlertBox {
         alertDialog.show();
     }
 
+    public void OpenAlertBoxReGame(Context context, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        TextView myMsg = new TextView(context);
+        myMsg.setText("\n\n" + message);
+        myMsg.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        builder.setView(myMsg);
+
+        builder.setCancelable(true);
+
+        builder.setPositiveButton("Tekrar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(context, context.getClass());
+                        context.startActivity(intent);
+                    }
+                });
+
+        builder.setNegativeButton("Çıkış", (DialogInterface.OnClickListener) (dialog, which) -> {
+            Intent intent = new Intent(context, MainAreaPage.class);
+            context.startActivity(intent);
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
     public void OpenAlertBoxError(Context context, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
