@@ -2,11 +2,14 @@ package com.example.memorengandroid.view.Pages.Games;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.memorengandroid.R;
 import com.example.memorengandroid.adapter.CustomAlertBox;
@@ -16,10 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Wordle extends AppCompatActivity {
-    //wordle1_edit_text : yok
-    //wordle2_edit_text : var ama yeri farklı
-    //wordle3_edit_text : var ve yeri aynı
-
     public int step = 1;
 
     private Button[] letters;
@@ -32,6 +31,9 @@ public class Wordle extends AppCompatActivity {
     int activeBoxIndex = 0;
     WordleGame game;
     CustomAlertBox customAlertBox = new CustomAlertBox(this);
+    View keyboard;
+    TextView reGameText;
+    String compWord = "BREAD";
 
 
     @Override
@@ -41,6 +43,18 @@ public class Wordle extends AppCompatActivity {
 
         allBoxSetup();
         allLetterSetup();
+
+        keyboard = findViewById(R.id.keyboard);
+        reGameText = findViewById(R.id.reGameText);
+
+        reGameText.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Wordle.this, Wordle.class);
+                startActivity(intent);
+            }
+        });
 
         closeicon = (ImageView) findViewById(R.id.closeicon);
         closeicon.setOnClickListener(new View.OnClickListener() {
@@ -100,12 +114,7 @@ public class Wordle extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (uiControllerWithSteps(updateBox, true)) {
-                    System.out.println("xxx activeBoxIndex : " + activeBoxIndex);
-                    System.out.println("xxx updateBox : " + updateBox);
-
                     if (updateBox.getText().toString().equals("")) {
-                        System.out.println("zaten boştu...");
-
                         if (activeBoxIndex != 0) {
                             activeBoxIndex -= 1;
                         }
@@ -114,8 +123,6 @@ public class Wordle extends AppCompatActivity {
                         updateBox = game.getBoxes().get(activeBoxIndex);
                         pointUpdateBox(updateBox);
                     } else {
-                        System.out.println("boş değildi...");
-
                         updateBox.setText("");
 
                         if (activeBoxIndex != 0) {
@@ -158,9 +165,6 @@ public class Wordle extends AppCompatActivity {
     }
 
     public Boolean uiControllerWithSteps(EditText updateBox, boolean forDelete) {
-        System.out.println("A : STEP : " + step);
-        System.out.println("A : UPDATEBOX : " + updateBox + " : " + updateBox.getText());
-
         if (forDelete) {
             for (EditText box : boxes[step-1]) {
                 if (updateBox == box && updateBox != boxes[step - 1][0]) {
@@ -181,9 +185,6 @@ public class Wordle extends AppCompatActivity {
     }
 
     private void onLetterClick(Button button) {
-        System.out.println("vvvvvvvvv : " + button.getText());
-        System.out.println("vvvvvvvvv : " + uiControllerWithSteps(updateBox, false));
-
         if (uiControllerWithSteps(updateBox, false)) {
             updateBox.setText(button.getText().toString());
 
@@ -201,13 +202,22 @@ public class Wordle extends AppCompatActivity {
 
     public void animateBoxes() {
         try {
+            String currentAnswer = "";
             EditText[] currentBoxes = boxes[step-1];
             int currentIndex = 0;
 
             for (EditText box : currentBoxes) {
-                box.setBackgroundResource(paintBoxes(box, currentIndex));
+                int resultColor = paintBoxes(box, currentIndex);
+                box.setBackgroundResource(resultColor);
+
+                currentAnswer += box.getText().toString();
+                updateKeyboard(box.getText().toString(), resultColor);
 
                 currentIndex += 1;
+            }
+
+            if (currentAnswer.equals(compWord)) {
+                endOfTheGame();
             }
 
             if (step < 5) {
@@ -215,17 +225,10 @@ public class Wordle extends AppCompatActivity {
 
                 activeBoxIndex += 1;
 
-                System.out.println("ÇÇÇÇÇÇÇÇÇ1 : " + step + " " + activeBoxIndex);
-
                 updateBox = game.getBoxes().get(activeBoxIndex);
-
-                System.out.println("ÇÇÇÇÇÇÇÇÇ2 : " + updateBox);
-
                 pointUpdateBox(updateBox);
             } else {
-                customAlertBox.OpenAlertBoxReGame(Wordle.this, "Oyun bitti, tekrar denemek ister misin? ");
-
-                System.out.println(".......END OF GAME......");
+                endOfTheGame();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -234,7 +237,6 @@ public class Wordle extends AppCompatActivity {
 
     public int paintBoxes(EditText editText, int indexOfLetter) {
         try {
-            String compWord = "FOUND";
             String controlLetter = editText.getText().toString();
 
             if (compWord.charAt(indexOfLetter) == controlLetter.charAt(0)) {
@@ -258,4 +260,34 @@ public class Wordle extends AppCompatActivity {
     public void pointOldBox(EditText oldBox) {
         oldBox.setBackgroundResource(R.drawable.wordle_edit_text);
     }
+
+    public void updateKeyboard(String letterFromController, int colorOfLetter) {
+        String letterOfButton;
+
+        for (Button letterButton : letters) {
+            letterOfButton = letterButton.getText().toString();
+
+            if (letterFromController.equals(letterOfButton)) {
+                letterButton.setBackgroundResource(colorOfLetter);
+
+                if (R.drawable.wordle2_edit_text == colorOfLetter) {
+                    letterButton.setClickable(false);
+                    letterButton.setTextColor(Color.parseColor("#aaaaaa"));
+                }
+            }
+        }
+    }
+
+    public void endOfTheGame () {
+        keyboard.setVisibility(View.GONE);
+        approveButton.setVisibility(View.GONE);
+        reGameText.setVisibility(View.VISIBLE);
+
+        customAlertBox.OpenAlertBoxReGame(Wordle.this, "Oyun bitti, tekrar denemek ister misin?");
+
+        System.out.println(".......END OF GAME......");
+    }
+
+    @Override
+    public void onBackPressed() {}
 }
