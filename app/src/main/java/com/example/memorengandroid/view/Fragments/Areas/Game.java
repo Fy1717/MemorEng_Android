@@ -12,11 +12,13 @@ import androidx.fragment.app.Fragment;
 
 import com.example.memorengandroid.R;
 import com.example.memorengandroid.view.Pages.Games.FillBlanks;
+import com.example.memorengandroid.view.Pages.Games.MatchWords;
+import com.example.memorengandroid.view.Pages.Games.MultipleChoice;
 import com.example.memorengandroid.view.Pages.Games.Wordle;
 
 
 public class Game extends Fragment {
-    View fillBlanks, wordle;
+    View fillBlanks, wordle, multipleChoice, matchWords;
 
     public Game() {
         // Required empty public constructor
@@ -41,7 +43,8 @@ public class Game extends Fragment {
 
         fillBlanks = view.findViewById(R.id.game_fill_blanks);
         wordle = view.findViewById(R.id.game_wordle);
-
+        multipleChoice = view.findViewById(R.id.game_multiple_choice);
+        matchWords = view.findViewById(R.id.game_match_words);
 
         fillBlanks.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +58,22 @@ public class Game extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), Wordle.class);
+                startActivity(intent);
+            }
+        });
+
+        multipleChoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MultipleChoice.class);
+                startActivity(intent);
+            }
+        });
+
+        matchWords.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MatchWords.class);
                 startActivity(intent);
             }
         });
